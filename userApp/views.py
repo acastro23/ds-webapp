@@ -40,7 +40,7 @@ def val_password(password):
     return None
 
 
-
+@csrf_exempt
 def register_user(request):
     """
     The breakdown:
@@ -95,7 +95,7 @@ def register_user(request):
             return JsonResponse({"error": "An unexpected error has occurred. Please try again later."}, status=500)
     return JsonResponse({"error": "Invalid request method is being used"}, status=405)
 
-
+@csrf_exempt
 def login_user(request):
     """
     The breakdown:
@@ -145,6 +145,46 @@ def login_user(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
+@csrf_exempt
+def update_email(request):
+    """
+    In regards to profile updates, only the email can be updated as of right now. 
+    """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            myLogger.error("Invalid JSON data received")
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    
+        user_id = request.session.get("user_id")
+        if not user_id:
+            return JsonResponse({"error": "Authentication required"}, status=401)
+        new_email = data.get("email")
+
+        email_val = val_email(new_email)
+        if email_val:
+            return JsonResponse({"error": email_val}, status=400)           # meaning an error occurred during email validation
+        
+        try:
+            existing_user = supabase.table("users").select("user_id").eq("email", new_email).execute()
+            if existing_user.data:
+                return JsonResponse({"error": "This email is already being used"}, status=400)
+            update_response = supabase.table("users").update({"email": new_email}).eq("user_id", user_id).execute()
+
+            if update_response.data:
+                return JsonResponse({"message": "Email has been updated"}, status=200)
+            else:
+                return JsonResponse({"error": "Failed to update email"}, status=500)
+            
+        except Exception as e:
+            myLogger.error(f"Error updating email due to: {e}", exc_info=True)
+            return JsonResponse({"error": "An unexpected error occurred. Please try again"}, status=500)
+    return JsonResponse({"error": "Invalid request method"}, status=500)
+
+
+
+@csrf_exempt
 def logout_user(request):
     """ Logging out should be simple, and clears the session """
     if request.method == "POST":
@@ -152,7 +192,6 @@ def logout_user(request):
         return JsonResponse({"message": "You have logged out"}, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
             
-
 
 def test_supabase(request):
     # Query the 'users' table in Supabase
