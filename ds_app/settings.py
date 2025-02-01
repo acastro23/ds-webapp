@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # AC01282025 -- apps that we create go under here
     'userApp.apps.UserappConfig',
+    'learnApp.apps.LearnappConfig',
 ]
 
 MIDDLEWARE = [

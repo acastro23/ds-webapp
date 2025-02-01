@@ -1,0 +1,18 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Learn - Algorithms{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Learn Data Structures & Algorithms</h1>
+    <p class="text-center">Click on an algorithm to learn more.</p>
+
+    <ul class="list-group">
+        {% for algorithm in algorithm_list %}
+            <li class="list-group-item text-center">
+                <a href="{% url 'learnApp:algorithm-detail' algorithm.slug %}">{{ algorithm.name }}</a>
+            </li>
+        {% endfor %}
+    
+    </ul>
+</div>
+{% endblock %}
