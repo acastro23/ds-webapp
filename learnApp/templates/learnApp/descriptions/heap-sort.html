@@ -1,0 +1,77 @@
+<h3>Introduction</h3>
+
+<!-- AC01312025 -- This section is the actual overview of the algorithm -->
+<p style="text-indent: 30px;">
+    While by definition, heaps are are defined as a "disordered collection of objects", that is definitly not what this data
+    structure is. Heaps are a clever, partially ordered data structure that are useful for task such as implementing <i>priority queues</i> The concepts of heaps arise
+    in several important algorithms such as: <i>Prim's algorithm, Dijkstra's algorithm, Huffman encoding, etc.</i> So, while this section is focused on the heapsort algorithm,
+    In order to understand <i>heap sort</i>, it's important to have a basic understanding of the <i>heaps</i>
+    data structure, and the basic operations related to heaps. 
+</p>
+
+
+<h3>Heaps</h3>
+<p style="text-indent: 30px;">
+    Heaps are an array-based data structure that can be viewed as a complete binary tree, where every level is fully filled except possibly the last, 
+    which is filled from left to right. In a heap, each parent node has children, and each node in the heap corresponds to
+   an element of an array. Take a look at the figure below to see the relation between a heap and array:
+</p>
+
+
+<!-- Include image here perhaps? -->
+<h5 style="text-align: center;">IMAGE GOES HERE</h5>
+
+
+
+<p style="text-indent: 30px;">
+    <i><b>Note:</b></i> When looking at a node on a heap, you can determine its array index by the following:
+</p>
+
+<!-- This section will most likely be replaced with an image to highlight floor operation -->
+<ul style="margin-left: 40px;">
+    <li><b>Parent node of index <code>i</code></b> → <code>arr[(i - 1) // 2]</code></li>
+    <li><b>Left child of index <code>i</code></b> → <code>arr[2 * i + 1]</code></li>
+    <li><b>Right child of index <code>i</code></b> → <code>arr[2 * i + 2]</code></li>
+</ul>
+
+<!-- Include image here perhaps? -->
+<h5 style="text-align: center;">IMAGE GOES HERE(possibly to replace list)</h5>
+
+
+<p style="text-indent: 30px;">
+    There are two main types of heaps:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li><b><u>Max Heap:</u></b> The key at each node is greater than or equal to its children, and the root node contains the max element.</li>
+    <li><b><u>Min Heap:</u></b> The key at each node is smaller than or equal to its children, and the root node contains the min element.</li>
+</ul>
+
+
+<p style="text-indent: 30px;">
+    There are also two main approaches to building a heap:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li><b><u>Top down approach:</u></b> Given an array, a heap can be constructed by inserting an element one at a time. At each insertion, perform  <i>Max-heapify</i> to maintain the max heap property.</li>
+    <li><b><u>Bottom up approach:</u></b> Given an array, construct a heap in accordance to the initial array, then perfrom <i>max-heapify</i> starting from the end of the heap to maintain the max-heap.</li>
+</ul>
+
+<h3> Exercises </h3>
+
+<!-- AC02062025: We can include images for users to identify what is a heap and what is not a heap, answer will be included in small caption text... -->
+
+
+
+<b>Note:</b> From this point onwards, when discussing heaps & heapsort, we'll be using a max-heap
+
+
+
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(nlogn)</li>
+        <li><strong>Worst case:</strong> O(nlogn)</li>
+        <li><strong>Average case:</strong> O(nlogn)</li>
+    </ul>
+</div>

@@ -1,0 +1,40 @@
+{% extends "ds_app/base.html" %}
+{% load static %}
+
+{% block title %}{{ data.title }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="text-center">{{ data.title }}</h1>
+
+
+    <div class="ms-4">
+        {{ description|safe }}
+    </div>
+
+    {% if data.step_images %}
+        <h3 class="text-center mt-4">Step-by-Step Breakdown</h3>
+        <div class="d-flex justify-content-center flex-wrap">
+            {% for img in data.step_images %}
+                <img src="{% static 'learnApp/images/'|add:img %}" alt="Step {{ forloop.counter }}" class="img-fluid m-2" style="max-width: 300px;">
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <h3 class="text-center mt-4">Code Implementation</h3>
+    <pre><code class="language-python">{{ data.code }}</code></pre>
+
+
+    <div class="text-center mt-4">
+        <a href="{% url 'learnApp:learn-home' %}" class="btn btn-primary">⬅ Back to Learn</a>
+    </div>    
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
+
+{% endblock %}
