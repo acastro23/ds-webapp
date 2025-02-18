@@ -1,0 +1,11 @@
+{% extends "ds_app/base.html" %}
+{% block title %}{{ quiz.0 }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1>{{ quiz.0 }}</h1> 
+    <p>{{ quiz.1 }}</p> 
+
+    <a href="{% url 'quizApp:quiz-start' quiz_id %}" class="btn btn-dark me-3">Start Quiz</a>
+</div>
+{% endblock %}

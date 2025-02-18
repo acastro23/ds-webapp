@@ -1,0 +1,98 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Time Trial Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Time Trial Quiz</h1>
+    <p class="text-center">Complete the quiz as fast as possible!</p>
+
+    <div class="text-center">
+        <h3>Timer: <span id="timer">120</span> seconds</h3>
+    </div>
+
+    <form id="quizForm" method="POST" action="{% url 'timeTrialApp:time-trial-submit' %}">
+        {% csrf_token %}
+        <input type="hidden" name="completion_time" id="completion_time">
+        <input type="hidden" name="correct_answers" id="correct_answers">
+
+        <div id="question-container">
+            {% for question_id, question in questions.items %}
+                <div class="question-container mt-4 question" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
+                    <h4>{{ question.question_text }}</h4>
+                    {% for answer_id, answer_text, is_correct in question.answers %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="question_{{ question_id }}" value="{{ answer_id }}" 
+                                   id="answer_{{ answer_id }}" data-correct="{{ is_correct }}">
+                            <label class="form-check-label" for="answer_{{ answer_id }}">
+                                {{ answer_text }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="button" id="prev-btn" class="btn btn-secondary" disabled>Previous</button>
+            <button type="button" id="next-btn" class="btn btn-secondary">Next</button>
+            <button type="submit" id="submit-btn" class="btn btn-dark" style="display: none;">Submit Time Trial</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let time = 120; 
+    let timerInterval = setInterval(() => {
+        document.getElementById("timer").innerText = time + " seconds";
+        if (time <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("quizForm").submit();
+        } else {
+            time--;
+        }
+    }, 1000);
+
+    document.getElementById("quizForm").addEventListener("submit", function() {
+        clearInterval(timerInterval);
+        document.getElementById("completion_time").value = 120 - time;
+
+        let correctAnswers = 0;
+        document.querySelectorAll("input[type=radio]:checked").forEach(input => {
+            if (input.dataset.correct === "true") { 
+                correctAnswers++;
+            }
+        });
+
+        document.getElementById("correct_answers").value = correctAnswers;
+    });
+
+    let questions = document.querySelectorAll(".question");
+    let currentQuestion = 0;
+    
+    function showQuestion(index) {
+        questions.forEach((q, i) => {
+            q.style.display = i === index ? "block" : "none";
+        });
+
+        document.getElementById("prev-btn").disabled = index === 0;
+        document.getElementById("next-btn").style.display = index === questions.length - 1 ? "none" : "inline-block";
+        document.getElementById("submit-btn").style.display = index === questions.length - 1 ? "inline-block" : "none";
+    }
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+    });
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            showQuestion(currentQuestion);
+        }
+    });
+    showQuestion(0);
+</script>
+
+{% endblock %}

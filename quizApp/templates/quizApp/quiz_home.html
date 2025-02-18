@@ -1,0 +1,19 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Quizzes{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1>Available Quizzes</h1>
+    <p>Select a quiz to begin!</p>
+
+    <ul class="list-group mt-4">
+        {% for quiz in quizzes %}
+            <li class="list-group-item text-center">
+                <a href="{% url 'quizApp:quiz-detail' quiz.0 %}">{{ quiz.1 }}</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">No quizzes available.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

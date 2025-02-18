@@ -1,0 +1,69 @@
+{% extends "ds_app/base.html" %}
+{% block title %}{{ quiz_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">{{ quiz_title }}</h1>
+    
+    <form id="quizForm" method="POST" action="{% url 'quizApp:quiz-submit' quiz_id %}">
+        {% csrf_token %}
+        
+        {% for question_id, question in questions.items %}
+            <div class="question-container mt-4" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
+                <h4>{{ question.question_text }}</h4>
+                {% for answer_id, answer_text in question.answers %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ question_id }}" value="{{ answer_id }}" id="answer_{{ answer_id }}">
+                        <label class="form-check-label" for="answer_{{ answer_id }}">
+                            {{ answer_text }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        
+        <div class="text-center mt-4">
+            <button type="button" id="prev-btn" class="btn btn-secondary" style="display: none;">Previous</button>
+            <button type="button" id="next-btn" class="btn btn-dark me-3">Next</button>
+            <button type="submit" id="submit-btn" class="btn btn-dark me-3" style="display: none;">Submit Quiz</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let currentQuestionIndex = 0;
+    const questions = document.querySelectorAll(".question-container");
+    const prevButton = document.getElementById("prev-btn");
+    const nextButton = document.getElementById("next-btn");
+    const submitButton = document.getElementById("submit-btn");
+
+    function showQuestion(index) {
+        questions.forEach((q, i) => {
+            q.style.display = i === index ? "block" : "none";
+        });
+
+        prevButton.style.display = index > 0 ? "inline-block" : "none";
+        nextButton.style.display = index < questions.length - 1 ? "inline-block" : "none";
+        submitButton.style.display = index === questions.length - 1 ? "inline-block" : "none";
+    }
+
+    prevButton.addEventListener("click", function () {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showQuestion(currentQuestionIndex);
+        }
+    });
+
+    nextButton.addEventListener("click", function () {
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            showQuestion(currentQuestionIndex);
+        }
+    });
+
+    showQuestion(currentQuestionIndex);
+});
+</script>
+
+{% endblock %}

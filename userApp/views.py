@@ -4,6 +4,7 @@ import json
 import bcrypt
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
 import re
 import logging
 
@@ -60,7 +61,6 @@ def register_user(request):
         email = data.get("email")
         password = data.get("password")
 
-        # validating the data from the JSON body
         val_errors = []
         username_error = val_user(username)
         if username_error:
@@ -72,28 +72,30 @@ def register_user(request):
         if password_error:
             val_errors.append(password_error)
         
-        # If there are any validation errors at all then return this message back to the user when they attempt to create the account
         if val_errors:
             return JsonResponse({"error": val_errors}, status=400)
-        
+
         try:
-            existing_user = supabase.table("users").select("*").eq("email", email).execute()
-            if existing_user.data:
-                return JsonResponse({"error": "User with this email already exist!"}, status=400)
-            
-            hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+            existing_user = supabase.table("users").select("user_id").eq("email", email).execute()
+            if existing_user.data and len(existing_user.data) > 0:
+                return JsonResponse({"error": "User with this email already exists!"}, status=400)
+
+            hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
             myResponse = supabase.table("users").insert({
                 "username": username,
                 "email": email,
-                "password": hashed_password.decode("utf-8"),
+                "password": hashed_password,
             }).execute()
+            
             return JsonResponse(myResponse.data, safe=False)
-        
+
         except Exception as e:
             myLogger.error(f"An error occurred during registration due to: {e}", exc_info=True)
             return JsonResponse({"error": "An unexpected error has occurred. Please try again later."}, status=500)
     return JsonResponse({"error": "Invalid request method is being used"}, status=405)
+
+
 
 @csrf_exempt
 def login_user(request):
@@ -108,41 +110,41 @@ def login_user(request):
     """
     if request.method == "POST":
         try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            myLogger.error("Invalid JSON data received during login attempt")
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
-        
-        email = data.get("email")
-        password = data.get("password")
+            if request.content_type == "application/json":
+                data = json.loads(request.body)
+            else:
+                data = request.POST
 
-        if not email:
-            return JsonResponse({"error": "An email is required for login"}, status=400)
-        if not password:
-            return JsonResponse({"error": "Password is required for login"}, status=400)
-        
-        try:
+            email = data.get("email")
+            password = data.get("password")
+
+            if not email:
+                return JsonResponse({"error": "An email is required for login"}, status=400)
+            if not password:
+                return JsonResponse({"error": "Password is required for login"}, status=400)
+
             user_response = supabase.table("users").select("*").eq("email", email).execute()
-            if not user_response:
-                return JsonResponse({"error": "Invalid email or password"}, status=401)
-            myUser = user_response.data[0]
-
-            stored_password = myUser["password"]
-
-            if not bcrypt.checkpw(password.encode("utf-8"), stored_password.encode("utf-8")):
+            if not user_response.data:
                 return JsonResponse({"error": "Invalid email or password"}, status=401)
             
+            myUser = user_response.data[0]
+
+            stored_password = myUser.get("password", "").encode("utf-8")
+            if not bcrypt.checkpw(password.encode("utf-8"), stored_password):
+                return JsonResponse({"error": "Invalid email or password"}, status=401)
+
             #--------------  AC0122 -- Test code for storing the users info in session  ---------------
             request.session["user_id"] = myUser["user_id"]
             request.session["username"] = myUser["username"]
-            #------------------------------------------------------------------------------------------ 
+            #------------------------------------------------------------------------------------------
 
             return JsonResponse({"message": "Login was successful", "username": myUser["username"]}, status=200)
 
         except Exception as e:
             myLogger.error(f"Error during login: {e}", exc_info=True)
-            return JsonResponse({"error": "An unexpected error has occurred. Please try again later."}, status=500)
+            return JsonResponse({"error": "An unexpected error occurred. Please try again."}, status=500)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 
 @csrf_exempt
@@ -164,7 +166,7 @@ def update_email(request):
 
         email_val = val_email(new_email)
         if email_val:
-            return JsonResponse({"error": email_val}, status=400)           # meaning an error occurred during email validation
+            return JsonResponse({"error": email_val}, status=400)
         
         try:
             existing_user = supabase.table("users").select("user_id").eq("email", new_email).execute()
@@ -183,17 +185,10 @@ def update_email(request):
     return JsonResponse({"error": "Invalid request method"}, status=500)
 
 
-
 @csrf_exempt
 def logout_user(request):
-    """ Logging out should be simple, and clears the session """
     if request.method == "POST":
-        request.session.flush()
-        return JsonResponse({"message": "You have logged out"}, status=200)
+        request.session.pop("user_id", None)
+        request.session.pop("username", None)
+        return redirect("home")
     return JsonResponse({"error": "Invalid request method"}, status=405)
-            
-
-def test_supabase(request):
-    # Query the 'users' table in Supabase
-    response = supabase.table("users").select("*").execute()
-    return JsonResponse(response.data, safe=False)

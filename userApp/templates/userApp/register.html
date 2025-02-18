@@ -1,0 +1,55 @@
+{% extends "ds_app/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Register</h2>
+    <form id="registerForm">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-dark me-3">Register</button>
+        <p id="message" class="mt-3 text-danger"></p>
+    </form>
+    <p class="mt-3">Already have an account? <a href="{% url 'userApp:login-page' %}">Login here</a></p>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    
+    const response = await fetch("{% url 'userApp:register-user' %}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, username, password })
+    });
+
+    const data = await response.json();
+    const messageBox = document.getElementById("message");
+
+    if (response.ok) {
+        messageBox.classList.remove("text-danger");
+        messageBox.classList.add("text-success");
+        messageBox.innerText = data.message;
+        setTimeout(() => {
+            window.location.href = "{% url 'userApp:login-page' %}";
+        }, 2000);
+    } else {
+        messageBox.classList.remove("text-success");
+        messageBox.classList.add("text-danger");
+        messageBox.innerText = data.error;
+    }
+});
+</script>
+{% endblock %}

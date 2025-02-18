@@ -1,0 +1,82 @@
+{% extends 'ds_app/base.html' %}
+
+{% block content %}
+
+<div class="container text-center mt-5">
+    <h1 class="fw-bold">Quiz Results</h1>
+    <h3 class="text-primary">{{ quiz_title }}</h3>
+
+    <h4 class="mt-4 fw-bold">Your Score:</h4>
+
+    <div class="d-inline-block p-3 mt-2 rounded text-white"
+         id="score-box">
+        {{ score_percentage }}
+    </div>
+
+
+    <div id="message-container" class="mt-3">
+        <p id="message" class="fs-4 fw-bold"></p>
+        <p id="message-subtext" class="text-muted"></p>
+    </div>
+
+
+    <div class="progress mt-3" style="height: 25px; width: 50%; margin: auto;">
+        <div id="progress-bar" class="progress-bar"
+             role="progressbar"
+             style="width: 0%;"
+             aria-valuenow="0"
+             aria-valuemin="0"
+             aria-valuemax="100">
+        </div>
+    </div>
+
+
+    <div class="mt-4">
+        <a href="{% url 'quizApp:quiz-home' %}" class="btn btn-dark me-3">
+            <i class="fas fa-arrow-left"></i> Return to Quizzes
+        </a>
+        <a href="{% url 'quizApp:quiz-start' quiz_id %}" class="btn btn-secondary">
+            <i class="fas fa-redo"></i> Retake Quiz
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let scorePercentage = parseInt("{{ score_percentage|default:'0' }}".replace('%', ''));
+
+        // Set Progress Bar
+        let progressBar = document.getElementById("progress-bar");
+        progressBar.style.width = scorePercentage + "%";
+        progressBar.setAttribute("aria-valuenow", scorePercentage);
+
+        // Set Score Box Color
+        let scoreBox = document.getElementById("score-box");
+        if (scorePercentage >= 80) {
+            scoreBox.classList.add("bg-success");
+        } else if (scorePercentage >= 50) {
+            scoreBox.classList.add("bg-warning");
+        } else {
+            scoreBox.classList.add("bg-danger");
+        }
+
+        // Set Message
+        let scoreMsg = document.getElementById("message");
+        let subText = document.getElementById("message-subtext");
+        if (scorePercentage >= 80) {
+            scoreMsg.innerText = "Great job!";
+            scoreMsg.classList.add("text-success");
+            subText.innerText = "You mastered this quiz!";
+        } else if (scorePercentage >= 50) {
+            scoreMsg.innerText = "Not bad! Keep practicing.";
+            scoreMsg.classList.add("text-warning");
+            subText.innerText = "A little more practice and you'll ace it!";
+        } else {
+            scoreMsg.innerText = "Try Again! You got this!";
+            scoreMsg.classList.add("text-danger");
+            subText.innerText = "Review the material to improve you score. You can atrempt this quiz at any tme!";
+        }
+    });
+</script>
+
+{% endblock %}
