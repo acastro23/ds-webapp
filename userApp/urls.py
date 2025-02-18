@@ -1,13 +1,15 @@
 from django.urls import path
-from .views import test_supabase, register_user, login_user, logout_user, update_email
+from .views import register_user, login_user, logout_user, update_email
+from django.shortcuts import render
 
 
 app_name = "userApp"
 
-urlpatterns = [
-    path("test-supabase/", test_supabase),                              # URL for testing
+urlpatterns = [                             
     path("register/", register_user, name="register-user"),
     path("login/", login_user, name="login-user"),
     path("update-email/", update_email, name="update-email"),
     path("logout/", logout_user, name="logout-user"),
+    path("login-page/", lambda request: render(request, "userApp/login.html"), name="login-page"),
+    path("register-page/", lambda request: render(request, "userApp/register.html"), name="register-page"), 
 ]

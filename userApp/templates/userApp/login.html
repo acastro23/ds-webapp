@@ -1,0 +1,59 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Login</h1>
+
+    <div id="error-message" class="alert alert-danger d-none"></div>
+
+    <form id="loginForm" method="POST" action="{% url 'userApp:login-user' %}">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+    
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+    
+        <div class="text-center">
+            <button type="submit" class="btn btn-dark">Login</button>
+        </div>
+    </form>    
+       
+</div>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        let response = await fetch("{% url 'userApp:login-user' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        let data = await response.json();
+
+        if (response.ok) {
+            window.location.href = "/";
+        } else {
+            let errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = data.error;
+            errorMessage.classList.remove("d-none");
+        }
+    });
+</script>
+
+{% endblock %}

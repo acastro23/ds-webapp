@@ -6,13 +6,12 @@
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; min-height: 80vh;">
         <h1>Welcome to the StrucTutor</h1>
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint deserunt laborum a itaque corrupti perferendis vitae. Placeat, id praesentium. Molestias natus pariatur error repellat a tempore maxime nisi eligendi aliquid?Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut veritatis soluta vel dolorum impedit nemo id voluptatem illo sint nam perferendis doloremque vero eos voluptatum, ex inventore placeat quia consequatur?</p>
-        {% if request.user.is_authenticated %}
-            <p>Welcome back, {{ request.user.username }}!</p>
-            <a href="{% url 'userApp:logout-user' %}" class="btn btn-danger">Logout</a>
+        {% if request.session.user_id %}
+            <p>Welcome back, <b>{{ request.session.username }}</b>!</p>          
         {% else %}
             <div class="mt-4">
-                <a href="{% url 'userApp:login-user' %}" class="btn btn-primary">Login</a>
-                <a href="{% url 'userApp:register-user' %}" class="btn btn-secondary">Register</a>
+                <a href="{% url 'userApp:login-page' %}" class="btn btn-dark me-3">Login</a>
+                <a href="{% url 'userApp:register-page' %}" class="btn btn-secondary">Register</a>
             </div>
         {% endif %}
     </div>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.db import connection
 import os
 
 
@@ -58,19 +59,31 @@ print("Sorted array is:", arr)
     }
 }
 
+
+# Ac02112025 -- This is subject to change. Manually mapping the quiz id is not ideal
+ALGORITHM_QUIZ_MAPPING = {
+    "heap-sort": 1,
+}
+
+
 def algorithm_detail(request, algorithm):
     data = ALGORITHMS.get(algorithm)
     if not data:
         return render(request, 'learnApp/not_found.html')
 
-    # AC01312025 -- All algorithms should follow this naming convention: algorithmName.html
     description_path = os.path.join(settings.BASE_DIR, "learnApp/templates/learnApp/descriptions", f"{algorithm}.html")
-
     if os.path.exists(description_path):
         description_html = render_to_string(f'learnApp/descriptions/{algorithm}.html')
     else:
         description_html = "<p>Description not available.</p>"
-    return render(request, 'learnApp/algorithm_template.html', {'data': data, 'description': description_html})
+    
+    quiz_id = ALGORITHM_QUIZ_MAPPING.get(algorithm)
+
+    return render(request, 'learnApp/algorithm_template.html', {
+        'data': data,
+        'description': description_html,
+        'quiz_id': quiz_id, 
+    })
 
 
 def learn_home(request):
