@@ -10,23 +10,24 @@ def time_trial_home(request):
 def time_trial_start(request):
     """AC02152025 -- Here we randomly select questions from all quizzes and starts the Time Trial."""
     with connection.cursor() as myCursor:
-        myCursor.execute("SELECT question_id, question_text FROM questions ORDER BY RANDOM() LIMIT 10;")
-        questions_data = myCursor.fetchall()
+        myCursor.execute("""
+            SELECT q.question_id, q.question_text, a.answer_id, a.answer_text, a.is_correct
+            FROM questions q
+            JOIN question_answers qa ON qa.question_id = q.question_id
+            JOIN answers a ON qa.answer_id = a.answer_id
+            WHERE q.quiz_id IN (SELECT quiz_id FROM quizzes ORDER BY RANDOM() LIMIT 1);
+        """)
+        question_data = myCursor.fetchall()
 
     questions = {}
-    for q_id, q_text in questions_data:
-        with connection.cursor() as myCursor:
-            myCursor.execute("""
-                SELECT a.answer_id, a.answer_text
-                FROM answers a
-                JOIN question_answers qa ON qa.answer_id = a.answer_id
-                WHERE qa.question_id = %s;
-            """, [q_id])
-            answers = myCursor.fetchall()
-        questions[q_id] = {"question_text": q_text, "answers": answers}
-    return render(request, 'timeTrialApp/time_trial_start.html', {
-        'questions': questions
-    })
+    for question_id, question_text, answer_id, answer_text, is_correct in question_data:
+        if question_id not in questions:
+            questions[question_id] = {
+                "question_text": question_text,
+                "answers": []
+            }
+        questions[question_id]["answers"].append((answer_id, answer_text, is_correct))
+    return render(request, 'timeTrialApp/time_trial_start.html', {"questions": questions})
 
 
 def time_trial_submit(request):
