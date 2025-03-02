@@ -1,0 +1,95 @@
+<h3>Recap -- What are Graphs?</h3>
+
+
+<p style="text-indent: 30px;">
+    Graphs are abstract data structures that represent complex, non-linear relationships. They are important in 
+    allowing us to depict how various elements are linked to one another. Visually, they are a collection of 
+    points on a plane where those points are called <i>Vertices</i> or <i>nodes</i>. Some nodes are connected by 
+    line segments called <i>edges</i> or <i>arcs</i>. 
+</p>
+
+<p><b><u>Note</u></b>: Graphs are either directed or undirected, check the figure below</p>
+
+
+<!-- AC03012025 -- POSSIBLE IMAGE OF DIRECTED/UNDIRECTED GRAPH VISUAL GOES HERE -->
+
+
+<p style="text-indent: 30px;">
+    Graphs, which are usually represented as G = (V, E), where |V| represents the number of vertices and |E|
+    represents the number of edges, have two standard ways of being represented. Those two ways being an
+    <i>adjacency list</i> and a <i>matrix</i>. For BFS, and other related graph algorithms, we'll assume that the 
+    input graph is an adjacency list, but below are all the standard ways of representing a graph:
+</p>
+
+
+<!-- AC03012025 -- POSSIBLE IMAGE OF GRAPH REPRESENTATION VISUAL GOES HERE -->
+
+
+<h3>BFS Introduction</h3>
+
+<p style="text-indent: 30px">
+    Breadth-first Search, known as BFS, is one of the simplest algorithms for searching a graph and the 
+    archetype for many important graph algorithms. The idea & concepts of other graph algorithms such as 
+    Prim;s minimum spanning tree and Dijskstra single source shortest-path stem from breadth-first search.
+</p>
+
+<h3>BFS procedure</h3>
+
+<p style="text-indent: 30px">
+    Given a graph G = (V,E) and some distinguished source vertex <i>s</i>. BFS works by exploring the edges of 
+    G and <i>discover</i> every vertex that is reachable from the source vertex, <i>s</i>. When exploring, BFS 
+    computes the distance from <i>s</i> to each reachable vertex, where the distance to some vertex <i>v</i> 
+    would equal to the smallest numbers of edges needed to go from s to v. This produces a tree known as a 
+    <i>'breadth-first tree</i> with root <i>s</i> that contains all reachable vertices. 
+</p>
+
+<p style="text-indent: 30px">
+    BFS keeps trach of its vertices through a first-in, first-out queue. The queue contains some vertices at 
+    a distance k, which possibly are followed by some vertices at distance k + 1. When BFS starts, the source 
+    vertex, which can be any node, gets enqueued and exploration begins on all vertices adjacent to the source.
+    All explored vertices get enqueued, and once all nodes have been explored, the source vertex gets dequeued. 
+    Its important to recognize, that we aren't visiting all vertices, just exploring them, only once all the
+    adjacent vertices have been explored do we leave the source vertex and visit a new one which can also be in 
+    any order. Visiting, or going deep, is not what BFS does, that method of exploration is the idea of DFS, which 
+    is covered in another section. 
+</p>
+
+
+<!-- AC03012025 -- STEPS OF BFS VISUAL GOES HERE -->
+
+
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(V + E)</li>
+        <li><strong>Worst case:</strong> O(V + E)</li>
+        <li><strong>Average case:</strong> O(V + E)</li>
+    </ul>
+</div>
+
+
+<h3>Runtime Analysis</h3>
+
+<p style="text-indent: 30px">
+    As mentioned, BFS uses a queue to keep track of its vertices. The operation of enqueueing and dequeueing 
+    takes O(1) time. Therefore, the total time for queue operations sums up to O(V) since the procedure scans 
+    the adjacency list of each vertex only when the vertex is dequeued. This means BFS will scan each adjacency 
+    list at most once. Since we also examine the edges incident on a vertex only when we visit from it, each 
+    eadge is examined at most twice, so the sum of lengths of all |V| adjacency list is O(E). The runtime sums 
+    up to be O(V + E) for best, average and worst case.
+</p>
+
+<p style="text-indent: 30px">
+    The space complexity for BFS is O(V) where V is the number of vertices in the graph. This stems from the 
+    auxilary data structures that BFS often uses in code implementation. For one, BFS uses a queue data structure 
+    to keep track of the vertices to visit. At most, the queue will contain all vertices that are reachable from 
+    source vertex, so the max number of vertices in the queue is bounded by the number of vertices in the graph. 
+    In addition, a lot implementations of BFS use some kind of 'visited' array to keep track of visited vertices 
+    to avoid revisiting them. This array also has a size equal to the number of vertices in the graph.
+</p>
+
+<p>
+    <b><u>Note</u></b>: Some implementation of BFS may use other data structures or variables, but the space 
+    required is often minimal compared to the queue and 'visited' array, so those implementations would not 
+    change its overall space complexity of O(V).
+</p>
