@@ -1,0 +1,56 @@
+<h2>What is Merge Sort?</h2>
+
+<!-- AC01312025 -- This section is the actual overview of the algorithm -->
+<p style="text-indent: 30px;">
+    Merge Sort is a highly efficient algorithm that splits an array into smaller subarrays by halving at each step, sorting them individually, and then merging them back together in order. 
+    Unlike simpler sorting methods like Bubble Sort or Selection Sort, which repeatedly compare and swap elements, Merge Sort systematically breaks the problem down into smaller parts, making it more efficient for larger datasets.
+</p>
+
+<p style="text-indent: 30px;">
+    Merge Sort follows the divide-and-conquer approach, meaning it recursively divides the array into halves until each subarray contains only one element. 
+    Then, it compares each element with each other, orders them correctly, and merges these smaller sorted arrays back together in order. 
+</p><br>
+
+
+<!-- AC0131 -- This might be changed for animations or for including multiple 'step' images
+-->
+<h2>Example</h2>
+<div class="text-center" style="max-width: 250px; display: flex; gap: 70px;">
+    <img src="/static/learnApp/images/mergesort1.png" alt="Merge Sort 1 Example" class="img-fluid my-3">
+    <img src="/static/learnApp/images/mergesort2.png" alt="Merge Sort 2 Example" class="img-fluid my-3">
+</div><br>
+
+<p style="text-indent: 30px;">
+    These are the steps to sort the array:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li>Keep dividing the unsorted array into <b>two halves</b> until you reach one element.</li>
+    <li>Merge by putting the <b>lowest</b> value first until you get to the final sorted array.</li>
+</ul>
+
+
+<!-- AC01312025 -- Each algorithm should talk about time complexity-->
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(nlogn)</li>
+        <li><strong>Worst case:</strong> O(nlogn)</li>
+        <li><strong>Average case:</strong> O(nlogn)</li>
+    </ul>
+</div>
+
+<!--AC01312025 -- Along with time complexity notes, an analysis is also require for page completion -->
+<h3>Analysis:</h3>
+<p style="text-indent: 30px;">
+    Merge Sort has a time complexity of <b>O(nlogn)</b> in all cases—best, average, and worst—because of the way it divides and merges elements.
+</p>
+<p style="text-indent: 30px;">
+    <b>Divide Step O(log n):</b> The algorithm recursively splits the array into halves until each subarray contains only 1 element.
+    Since we repeatedly halve the input size, the number of times we can divide an array of size n is log base 2 of n, or <b>O(log n)</b>.
+</p>
+<p style="text-indent: 30px;">
+    <b>Merge Step O(n):</b> Once the array is fully divided, the algorithm begins merging the smaller sorted subarrays back together.
+    Each merge involves comparing elements and placing them in order, which takes <b>O(n)</b> time in total since every element must be considered and merged once at each level.
+    Since there are <b>O(log n)</b> levels of division and each level requires <b>O(n)</b> operations to merge, the total complexity is O(log n) * O(n) = <b>O(nlogn)</b>.
+</p>
