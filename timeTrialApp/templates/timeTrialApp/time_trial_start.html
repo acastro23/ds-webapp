@@ -43,7 +43,7 @@
 <script>
     let time = 120; 
     let timerInterval = setInterval(() => {
-        document.getElementById("timer").innerText = time + " seconds";
+        document.getElementById("timer").innerText = time;
         if (time <= 0) {
             clearInterval(timerInterval);
             document.getElementById("quizForm").submit();

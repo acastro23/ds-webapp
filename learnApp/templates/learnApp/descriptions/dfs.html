@@ -1,1 +1,61 @@
-<h3></h3>
+<h3>Depth-first Search Introduction</h3>
+
+<p style="text-indent: 30px;">
+    Depth-first Search, as the name implies, searches 'deeper' into a graph, whenever possible. Recall, that when breadth-first search visits a new vertex, it'll explore 
+    all its adjacent vertices before visiting the next. DFS, works the opposite, where DFS will visit a vertex and go deep before 'back-tracking'. This concept of graph traversal
+    is important as DFS yields valuable information about the structure of a graph, and has many applications such as:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li> Checking connectivity, i.e., finding connected components</li>
+    <li>Finding articulation points and biconnected components</li>
+    <li>Checking acyclity</li>
+    <li>Searching State-space of problem for solution(AI)</li>
+</ul>
+
+<p><b><u>Note</u></b>: Depth-first search is the main idea behind the <i>topological sorting algorithm</i></p>
+
+
+<h3>Depth-first search procedure</h3>
+
+<p style="text-indent: 30px;">
+    Depth-first search starts at an arbitrary vertex <i>v</i> and explores the edges out its adjacent vertex that still has unexplored edges, i.e., on each iteration, DFS proceeds 
+    to an unvisited vertex until it reaches a dead end. Once a dead end is reached, the search "backtracks" one edge to the vertex it came from and tries to continue visiting 
+    unvisited vertices from there. This procedure continues until all vertices that are reachable from the original source vertex have been discoverd. If any unvisited vertices remain in the graph, then DFS will 
+    select one of them as the new source, repeating the search from that Source, and repeats until all vertices have been discovered.
+</p>
+
+<p style="text-indent: 30px;">
+    DFS uses follows a last-in, first-out approach, using a <i>stack</i> to keep track of unvisited vertices. When DFS reaches a vertex <i>v</i> for the first time, it gets pushed 
+    into the stack. A vertex gets popped off the stack once it becomes a dead end, meaning when there are no more adjacent unvisited vertices. Below is a demonstration of DFS:
+</p>
+
+<!--AC03022025 -- IMAGE/ANIMATION FOR DFS GOES HERE -->
+
+<p><b><u>Note</u></b>: DFS works on both directed and undirected graphs</p>
+
+
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(V + E)</li>
+        <li><strong>Worst case:</strong> O(V + E)</li>
+        <li><strong>Average case:</strong> O(V + E)</li>
+    </ul>
+</div>
+
+
+<h3>Runtime Analysis</h3>
+
+<p style="text-indent: 30px">
+    As with Breadth-first search, the time complexity of Depth-first search is determined by the number of vertices and edges in the graph. Therefore, the time complexity of DFS is 
+    O(V + E), where V represents the number of vertices and E represents the number of edges in the graph. DFS processes each node once and examines all of its edges, meaning 
+    we take O(V) time since each node will be visited at most once. When exploring the edges, in an adjacency list representation, each edge is examined once which contributes 
+    O(E) times. Together, this gives DFS a runtime of O(|V| + |E|), the same runtime as BFS with the only difference being the order in which we traverse the nodes. There are some 
+    special cases though, such as performing DFS on a tree, which has a time complexity of O(V) since E is small.
+</p>
+
+<p style="text-indent: 30px">
+    The space complexity of DFS depends on how the graph is represented and the recursion stack (if using recursion) or the explicit stack (if using an iterative approach). Assuming 
+    a recurisve approach, the space complexity of DFS is O(V), where V represents the number of vertices in the graph, assuming the worst case where the graph is a striaght line.
+</p>

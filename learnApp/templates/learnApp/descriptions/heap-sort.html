@@ -5,8 +5,7 @@
     While by definition, heaps are are defined as a "disordered collection of objects", that is definitly not what this data
     structure is. Heaps are a clever, partially ordered data structure that are useful for task such as implementing <i>priority queues</i> The concepts of heaps arise
     in several important algorithms such as: <i>Prim's algorithm, Dijkstra's algorithm, Huffman encoding, etc.</i> So, while this section is focused on the heapsort algorithm,
-    In order to understand <i>heap sort</i>, it's important to have a basic understanding of the <i>heaps</i>
-    data structure, and the basic operations related to heaps. 
+    it's important to have a basic understanding of <i>heaps</i> data structure, and the basic operations related to heaps in order to truly undersatnd heap sort.
 </p>
 
 
@@ -63,7 +62,50 @@
 
 
 
-<b>Note:</b> From this point onwards, when discussing heaps & heapsort, we'll be using a max-heap
+<p><b>Note:</b> From this point onwards, when discussing heaps & heapsort, we'll be using a max-heap</p>
+
+
+<!-----------------------------------------------------------------------Heapify Start-------------------------------------------------------------------------------------------->
+<h3> Maintaing Heap property </h3>
+<p style="text-indent: 30px;">
+    When discussing the methods for building a heap, you might recall the term "Max-heapify" being thrown around, but what exactly is that? <i>Max-heapify</i> helps maintain a property 
+    knwon as the max-heap property where for every node <i>i</i> other than the root, the value of a node is at most the value of its parent. Meaning the largest element is stored at the 
+    root, and the subtrees rooted at a node contain values no larger than that contained at the node itself. When Max-heapify is called, and it 
+</p>
+<!-----------------------------------------------------------------------Heapify Ends-------------------------------------------------------------------------------------------->
+
+
+<!-----------------------------------------------------------------------Insertion Start-------------------------------------------------------------------------------------------->
+<h3>Heap operations -- Insertion</h3>
+<p style="text-indent: 30px;">
+    There are two main operations done on heap besides <i>heapify</i>, and those are insertion and deletion. Insertion is the simpler operation of the two, and is mainly a two step 
+    process. Given a heap, inserting a new element is done at the end of the heap as the last index. Once an element is inserted, perform "Max-heapify" to ensure the max-heap property 
+    is still satisfied. Here's an illustration: 
+</p>
+
+<!-- AC03062025: We can include images for insertion here possibly... -->
+<h5 style="text-align: center;">IMAGE GOES HERE</h5>
+
+<p><b>Note:</b> The time complexity for inserting into a heap is O(log n)</p>
+<!-----------------------------------------------------------------------Insertion ends---------------------------------------------------------------------------------------------->
+
+
+<!-----------------------------------------------------------------------Deletion Start-------------------------------------------------------------------------------------------->
+<h3>Heap operations -- Deletion</h3>
+<p style="text-indent: 30px;">
+    Deletion is a bit more complicated, and its a key operation done in heap sort. Given a heap, exchange the root's key with the last key of the heap, and decrease the heap's size 
+    by 1. Perform "Max-heapify" to ensure the max-heap property is still satisfied. Here's an illustration:
+</p>
+
+<!-- AC03062025: We can include images for insertion here possibly... -->
+<h5 style="text-align: center;">IMAGE GOES HERE</h5>
+
+<p><b>Note:</b> 
+    The time complexity for deleting into a heap is O(log n). This is because the number of key comparisons that are needed for "Max-heapify" after the operation has been and the 
+    size of the heap has been decreased by 1 can not require more key comparisons than twice the heap's height.
+
+</p>
+<!-----------------------------------------------------------------------Deletion ends---------------------------------------------------------------------------------------------->
 
 
 

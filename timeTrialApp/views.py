@@ -8,14 +8,17 @@ def time_trial_home(request):
 
 
 def time_trial_start(request):
-    """AC02152025 -- Here we randomly select questions from all quizzes and starts the Time Trial."""
+    """AC02152025:
+            All questions from the questions table along with their answer choices will be queried and selected at random for this mode.
+        Ideally, it'll keep showing users a new question until the timer runs out OR if the user manages to answer every single question in the database.
+    """
     with connection.cursor() as myCursor:
         myCursor.execute("""
             SELECT q.question_id, q.question_text, a.answer_id, a.answer_text, a.is_correct
             FROM questions q
             JOIN question_answers qa ON qa.question_id = q.question_id
             JOIN answers a ON qa.answer_id = a.answer_id
-            WHERE q.quiz_id IN (SELECT quiz_id FROM quizzes ORDER BY RANDOM() LIMIT 1);
+            ORDER BY RANDOM();
         """)
         question_data = myCursor.fetchall()
 

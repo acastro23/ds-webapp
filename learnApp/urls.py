@@ -6,5 +6,5 @@ app_name = 'learnApp'
 
 urlpatterns = [
     path('', views.learn_home, name='learn-home'),
-    path('<str:algorithm>/', views.algorithm_detail, name='algorithm-detail'),
+    path('<str:algorithm_name>/', views.algorithm_detail, name='algorithm-detail'),
 ]
