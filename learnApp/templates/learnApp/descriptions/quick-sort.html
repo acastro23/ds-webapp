@@ -12,6 +12,17 @@
     Quicksort is one of the fastest sorting algorithms.
 </p><br>
 
+<h2>What Makes a Good Pivot?</h2>
+A good pivot results in balanced partitions—where both halves of the array have approximately equal elements. 
+The median of the array is ideal, but calculating the exact median takes extra time.<br><br>
+
+<h2>In-Place Sorting Algorithm</h2>
+<b>Quick Sort</b> is an in-place sorting algorithm, meaning it does not require extra memory proportional to the input size.
+It modifies the array directly during partitioning.<br>
+
+<b>Merge Sort</b> is NOT in-place.
+Merge Sort requires additional memory to store temporary subarrays during merging.<br></br>
+
 
 <!-- AC0131 -- This might be changed for animations or for including multiple 'step' images
 -->
@@ -76,12 +87,20 @@
     </ul>
 </div>
 
+<div class="text-center">
+    <h3>Space Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li>Quick Sort uses O(log n) auxiliary space due to recursive function calls.</li>
+        <li>The depth of recursion depends on how balanced the partitions are.</li>
+        <li>Worst case (O(n) space): If the pivot consistently picks the smallest or largest element (highly unbalanced partitions).</li>
+        <li>Best case (O(log n) space): If partitions are evenly divided, leading to a balanced recursive call tree.</li>
+    </ul>
+</div>
+
 <!--AC01312025 -- Along with time complexity notes, an analysis is also require for page completion -->
 <h3>Analysis:</h3>
 <p style="text-indent: 30px;">
     The best and average cases occur when the pivot is chosen such that it splits the array into two roughly equal halves at each step.
-</p>
-<p style="text-indent: 30px;">
     In each step, the array partitions around a pivot which results in <b>two subarrays of size n/2</b>. 
     Each partitioning operation takes <b>O(n)></b> time because each element is compared to the pivot once.
 </p>
