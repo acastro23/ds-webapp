@@ -1,0 +1,138 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<style>
+    body {
+    font-family: sans-serif;
+    background-color: rgb(245, 245, 245);
+    margin: 0;
+    padding: 0;
+    color: rgb(25, 67, 67);
+}
+
+.container {
+    max-width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.159);
+    border-radius: 5px;
+}
+
+/* Profile Picture */
+.profile-pic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-pic img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.profile-pic button {
+    padding: 5px 10px;
+    background: #262626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.profile-pic button:hover {
+    background: #2f2f2f;
+}
+
+/* Bio Section */
+.bio-section {
+    flex: 1;
+}
+
+.bio-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.bio-section textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Quizzes & Leaderboard Section */
+
+.quiz-lb-section {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.quizzes-section,
+.leaderboard-section {
+    margin-top: 20px;
+}
+
+#quizzes-btn {
+    padding: 8px 15px;
+    background: #262626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#quizzes-btn:hover {
+    background: #2f2f2f;
+}
+
+#leaderboard-btn {
+    padding: 8px 15px;
+    background: #262626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+</style>
+
+
+    <div class="container">
+        <!-- Profile Picture Placeholder -->
+        <div class="profile-pic">
+            <img src="placeholder.jpg" id="profile-icon">
+            <button id="upload-btn">Upload</button>
+        </div>
+
+        <!-- Bio Textbox -->
+        <div class="bio-section">
+            <label for="bio">Bio</label>
+            <textarea id="bio" maxlength="300" placeholder="Write your bio here..."></textarea>
+        </div>
+
+        <div class="quiz-lb-section">
+
+        <!-- Quizzes Completed Button -->
+        <div class="quizzes-section">
+            <button id="quizzes-btn">Quizzes Completed: </button>
+        </div>
+
+        <!-- Leaderboard Placement -->
+        <div class="leaderboard-section">
+            <button id="leaderboard-btn">Leaderboard Rank: </button>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}
