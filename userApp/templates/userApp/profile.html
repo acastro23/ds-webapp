@@ -10,10 +10,10 @@
     color: rgb(25, 67, 67);
 }
 
-.container {
+.containerprofile {
     max-width: 80%;
     margin: 50px auto;
-    padding: 20px;
+    padding: 50px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.159);
     border-radius: 5px;
@@ -71,11 +71,22 @@
     margin-bottom: 20px;
 }
 
+#save-btn {
+    padding: 2px 8px;
+    background: #f6f6f6;
+    color: rgb(24, 24, 24);
+    border: 1px solid rgb(27, 27, 27);
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 50px;
+}
+
 /* Quizzes & Leaderboard Section */
 
 .quiz-lb-section {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     gap: 50px;
 }
 
@@ -103,15 +114,15 @@
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: default;
 }
 </style>
 
-
-    <div class="container">
+    <div class="containerprofile">
         <!-- Profile Picture Placeholder -->
         <div class="profile-pic">
-            <img src="placeholder.jpg" id="profile-icon">
+            <img id="profile-icon">
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
             <button id="upload-btn">Upload</button>
         </div>
 
@@ -119,13 +130,16 @@
         <div class="bio-section">
             <label for="bio">Bio</label>
             <textarea id="bio" maxlength="300" placeholder="Write your bio here..."></textarea>
+            <button id="save-btn">Save Profile</button>
         </div>
 
         <div class="quiz-lb-section">
 
         <!-- Quizzes Completed Button -->
         <div class="quizzes-section">
-            <button id="quizzes-btn">Quizzes Completed: </button>
+            <a href="{% url 'quizApp:quiz-home' %}">
+                <button id="quizzes-btn">Quizzes Completed: </button>
+            </a>
         </div>
 
         <!-- Leaderboard Placement -->
@@ -134,5 +148,43 @@
         </div>
         </div>
     </div>
+
+    <script>
+        // Save the profile picture locally
+    document.getElementById("upload-btn").addEventListener("click", function() {
+        document.getElementById("file-input").click();
+    });
+
+    document.getElementById("file-input").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profile-icon").src = e.target.result;
+                localStorage.setItem("profileImage", e.target.result); // Save to Local Storage
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Save the bio
+    document.getElementById("save-btn").addEventListener("click", function() {
+        const bioText = document.getElementById("bio").value;
+        localStorage.setItem("bioText", bioText);
+        alert("Profile saved!");
+    });
+
+    // On reload, they are still there
+    window.onload = function() {
+        const savedImage = localStorage.getItem("profileImage");
+        const savedBio = localStorage.getItem("bioText");
+        if (savedImage) {
+            document.getElementById("profile-icon").src = savedImage;
+        }
+        if (savedBio) {
+            document.getElementById("bio").value = savedBio;
+        }
+    };
+    </script>    
 
 {% endblock %}
