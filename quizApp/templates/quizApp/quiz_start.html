@@ -2,26 +2,62 @@
 {% block title %}{{ quiz_title }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">{{ quiz_title }}</h1>
-    
+<style>
+    .fixed-size-choice {
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+        transition: all 0.25s ease;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
+
+    .btn-outline-dark:hover.fixed-size-choice {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa;
+    }
+
+    .btn-check:checked + .btn-outline-dark.fixed-size-choice {
+        background-color: #212529;
+        color: white;
+        border-color: #212529;
+        transform: scale(1.02);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+
+<div class="container mt-5 text-center">
+    <h1 class="fw-bold">{{ quiz_title }}</h1>
+
     <form id="quizForm" method="POST" action="{% url 'quizApp:quiz-submit' quiz_id %}">
         {% csrf_token %}
-        
+
         {% for question_id, question in questions.items %}
             <div class="question-container mt-4" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
-                <h4>{{ question.question_text }}</h4>
-                {% for answer_id, answer_text in question.answers %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="question_{{ question_id }}" value="{{ answer_id }}" id="answer_{{ answer_id }}">
-                        <label class="form-check-label" for="answer_{{ answer_id }}">
-                            {{ answer_text }}
-                        </label>
-                    </div>
-                {% endfor %}
+                <h4 class="mb-4">{{ question.question_text }}</h4>
+
+                <div class="row justify-content-center">
+                    {% for answer_id, answer_text in question.answers %}
+                        {% if forloop.counter0|divisibleby:2 %}
+                            <div class="w-100 mb-3"></div>
+                        {% endif %}
+                        <div class="col-md-4 mb-3">
+                            <input type="radio" class="btn-check" name="question_{{ question_id }}" value="{{ answer_id }}" 
+                                   id="answer_{{ answer_id }}" autocomplete="off">
+                            <label class="btn btn-outline-dark w-100 py-3 fixed-size-choice" for="answer_{{ answer_id }}">
+                                {{ answer_text }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
-        
+
         <div class="text-center mt-4">
             <button type="button" id="prev-btn" class="btn btn-secondary" style="display: none;">Previous</button>
             <button type="button" id="next-btn" class="btn btn-dark me-3">Next</button>
@@ -65,5 +101,4 @@ document.addEventListener("DOMContentLoaded", function () {
     showQuestion(currentQuestionIndex);
 });
 </script>
-
 {% endblock %}

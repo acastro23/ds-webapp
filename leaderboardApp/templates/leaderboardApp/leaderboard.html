@@ -1,0 +1,33 @@
+{% extends "ds_app/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Time Trial Leaderboard</h1>
+
+    <div class="card shadow-sm rounded-4">
+        <div class="card-body">
+            {% if top_users %}
+                <table class="table table-striped text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Correct Answers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for username, correct in top_users %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ username }}</td>
+                            <td>{{ correct }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center text-muted">No leaderboard entries yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -39,17 +39,28 @@ def time_trial_submit(request):
         if not user_id:
             return JsonResponse({"error": "You must be logged in to submit a Time Trial quiz."}, status=401)
 
-        completion_time = round(float(request.POST.get("completion_time")))
-        correct_answers = int(request.POST.get("correct_answers", 0))
+        try:
+            completion_time = round(float(request.POST.get("completion_time", "0")))
+        except ValueError:
+            return JsonResponse({"error": "Invalid or missing completion time."}, status=400)
+
+        try:
+            correct_answers = int(request.POST.get("correct_answers", "0"))
+        except ValueError:
+            return JsonResponse({"error": "Invalid or missing correct answers count."}, status=400)
 
         with connection.cursor() as myCursor:
             myCursor.execute("""
-                SELECT highest_score FROM leaderboard WHERE user_id = %s
+                SELECT highest_score, correct_answers FROM leaderboard WHERE user_id = %s
             """, [user_id])
-            
-            existing_time = myCursor.fetchone()
 
-            if existing_time is None or completion_time < existing_time[0]:
+            existing_entry = myCursor.fetchone()
+
+            if (
+                existing_entry is None or
+                correct_answers > existing_entry[1] or
+                (correct_answers == existing_entry[1] and completion_time < existing_entry[0])
+            ):
                 myCursor.execute("""
                     INSERT INTO leaderboard (user_id, highest_score, correct_answers)
                     VALUES (%s, %s, %s)

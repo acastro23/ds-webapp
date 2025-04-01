@@ -1,258 +1,321 @@
+<div class="container py-4" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.05rem;">
 
-<!---------------------------------------------------------Introduction Start-------------------------------------------------------------------------------------------------------->
-<style>
-    .border-black {
-        border: 3px solid black;
-        padding: 5px;
-    }
-    .fixed-size {
-        width: 100%; 
-        height: 300px;
-        object-fit: contain;
-    }
-    .image-caption {
-        font-style: italic;
-        margin-top: 8px;
-        font-size: 14px;
-        color: #333;
-    }
-</style>
-
-<!-- AC01312025 -- This section is the actual overview of the algorithm -->
-<p style="text-indent: 30px;">
-    While by definition, heaps are are defined as a "disordered collection of objects", that is definitly not what this data
-    structure is. Heaps are a clever, partially ordered data structure that are useful for task such as implementing <i>priority queues</i> The concepts of heaps arise
-    in several important algorithms such as: <i>Prim's algorithm, Dijkstra's algorithm, Huffman encoding, etc.</i> So, while this section is focused on the heapsort algorithm,
-    it's important to have a basic understanding of <i>heaps</i> data structure, and the basic operations related to heaps in order to truly undersatnd heap sort.
-</p><br>
-
-<!---------------------------------------------------------Introduction End----------------------------------------------------------------------------------------------------------->
-
-
-<h3 style="text-align: center;">Heaps</h3>
-<p style="text-indent: 30px;">
-    Heaps are an array-based data structure that can be viewed as a complete binary tree, where every level is fully filled except possibly the last, 
-    which is filled from left to right. In a heap, each parent node has children, and each node in the heap corresponds to
-   an element of an array. Take a look at the figure below to see the relation between a heap and array:
-</p>
-
-
-<div class="container">
-    <div class="row align-items-center">
-        <!-- This for left pic (Heap) -->
-        <div class="col-md-5 text-center">
+    <!---------------------------------------------------------Introduction Start-------------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center">Introduction</h2>
+          <p class="text-indent">
+            While by definition, heaps are described as a "disordered collection of objects," that definition often refers to memory heaps used in system-level programming.
+            In contrast, the <i>heap</i> we're referring to is a clever, partially ordered data structure that are useful for tasks such as implementing <i>priority queues</i>.
+            The concept of heaps arises in several important algorithms such as <i>Prim's algorithm, Dijkstra's algorithm, Huffman encoding</i>, and more.
+            Beyond theoretical use, heaps are heavily used in many real-world systems such as operating systems for task scheduling, network routing protocols, etc.
+            So, while this section is focused on the <i>heapsort</i> algorithm, it's important to have a basic understanding of the <i>heap</i> data structure
+            and the operations related to it in order to truly understand heapsort.
+          </p>
+        </div>
+      </div>      
+    <!---------------------------------------------------------Introduction End----------------------------------------------------------------------------------------------------------->
+  
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Heaps</h3>
+        <p class="text-indent">
+          Heaps are an array based data structure that can be visualized as a complete binary tree, where every level is fully filled except possibly the last, 
+          which is filled from left to right. In a heap, each parent node may have children, and each node in the tree corresponds to an element in an array. The figures below 
+          illustrate the relationship between a heap and its array representation:
+        </p>
+        
+  
+        <div class="row align-items-center text-center my-3">
+          <div class="col-md-5">
             <img src="/static/learnApp/images/heap_complete_visual.png" alt="Heap Tree" class="img-fluid border-black">
-            <p class="image-caption">Heap Representation</p>
+            <p class="image-caption text-muted small">Heap Representation</p>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-5">
+            <img src="/static/learnApp/images/heap_complete_visual_array.png" alt="Heap Array" class="img-fluid border-black">
+            <p class="image-caption text-muted small">Array Representation</p>
+          </div>
+        </div>
+  
+        <div class="p-3 mb-4 rounded border border-dark bg-light text-dark" style="background-color: #f8f9fa;">
+          <strong>Note:</strong> When looking at a node on a heap, you can determine its array index by the following:
+        </div>
+  
+        <div class="text-center my-4">
+          <img src="/static/learnApp/images/heap_array_computation.png" alt="Heap-Array computation image" class="img-fluid border-black">
+          <p class="image-caption text-muted small">This image is from the <span class="fst-italic fw-semibold text-dark">Introduction to Algorithms by Thomas H_ Cormen</span> book.</p>
+        </div>
+  
+        <p class="text-indent">There are two main types of heaps:</p>
+        <ul class="ms-4">
+          <li><b>Max Heap:</b> The key at each node is greater than or equal to its children, and the root node contains the max element.</li>
+          <li><b>Min Heap:</b> The key at each node is smaller than or equal to its children, and the root node contains the min element.</li>
+        </ul>
+  
+        <p class="text-indent">There are also two main approaches to building a heap:</p>
+        <ul class="ms-4">
+          <li><b>Top down approach:</b> Given an array, a heap can be constructed by inserting an element one at a time. At each insertion, perform  <i>Max-heapify</i> to maintain the max heap property.</li>
+          <li><b>Bottom up approach:</b> Given an array, construct a heap in accordance to the initial array, then perfrom <i>max-heapify</i> starting from the end of the heap to maintain the max-heap.</li>
+        </ul>
+      </div>
+      <!-----------------------------------------------------------Exercise Start----------------------------------------------------------------------------------------------------------->
+      <div class="card-body">
+        <h3 class="card-title text-center">Exercises</h3>
+        <p class="text-center">The following 3 images are exercises, and the objective is to indentify what is a heap, and what is not. Try it!</p>
+        <div class="row text-center">
+          <div class="col-md-4">
+            <img src="/static/learnApp/images/heap_example1.png" class="img-fluid border-black fixed-size">
+            <p class="image-caption text-muted small"><u>Exercise 1</u>: <strong>Not</strong> a heap, does not satisfy either heap property</p>
+          </div>
+          <div class="col-md-4">
+            <img src="/static/learnApp/images/heap_example2.png" class="img-fluid border-black fixed-size">
+            <p class="image-caption text-muted small"><u>Exercise 2</u>: <em>Is</em> a heap</p>
+          </div>
+          <div class="col-md-4">
+            <img src="/static/learnApp/images/heap_example3.png" class="img-fluid border-black fixed-size">
+            <p class="image-caption text-muted small"><u>Exercise 3</u>: <strong>Not</strong> a heap, only the very last node can be missing from a heap</p>
+              </div>
+    </div>
+    <!-----------------------------------------------------------Insertion End------------------------------------------------------------------------------------------------------------->
+      </div>
+    </div>
+  </div>
+    <!-----------------------------------------------------------Exercise End------------------------------------------------------------------------------------------------------------->
+  
+    <!-----------------------------------------------------------------------Heapify Start-------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Maintaining Heap Property</h3>
+        <p class="text-indent">
+          When discussing the methods for building a heap, you might recall the term <i>Max-heapify</i> being mentioned, but what exactly is it? <i>Max-heapify</i> is the operation 
+          that maintains a key property known as the max-heap property, meaning: for every node <i>i</i> other than the root, the value of the node must be less than or equal to 
+          the value of its parent. This ensures that the largest element is always at the root, and each subtree rooted at a node contains values no greater than that node.
+        </p>
+        
+        <p class="text-indent">
+          When <i>Max-heapify</i> is called, it assumes that the left (<i>l</i>) and right (<i>r</i>) child nodes are already valid max heaps, but the current node <i>i</i> may 
+          be violating the heap property. If it is, <i>Max-heapify</i> lets the value at node <i>i</i> "sink" down the tree until the property is restored. This is typically done 
+          using recursion: <i>Max-heapify</i> calls itself on the affected child subtree until the heap is fixed. Although iterative implementations are also possible, 
+          they will not discussed here.
+        </p>
+        
+          </div>
+    </div>
+    <!-----------------------------------------------------------------------Heapify Ends-------------------------------------------------------------------------------------------->
+  
+    <!-----------------------------------------------------------Insertion Start----------------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Heap operations: Insertion</h3>
+        <p class="text-indent">
+          There are two main operations done on heaps besides <i>heapify</i>, and those are insertion and deletion.
+          Insertion is the simpler operation of the two, and is mainly a two step process. Given a heap, inserting a new element is done at the end of the heap at the next 
+          available index. Once the element is inserted, we perform <i>max-heapify</i> to ensure the max-heap property is still satisfied. Here's an illustration:
+        </p>
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heapInsert_step1.png" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 1: Original heap before insertion</p>
+            </div>
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heapInsert_step2.png" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 2: Insert node 10 at the end of the heap</p>
+            </div>
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heapInsert_step3.png" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 3: Perform max-heapify to restore heap</p>
+            </div>
+          </div>
         </div>
         
-        <div class="col-md-2"></div>
-
-        <!-- Ths for right pic (Array) -->
-        <div class="col-md-5 text-center d-flex flex-column align-items-center">
-            <img src="/static/learnApp/images/heap_complete_visual_array.png" alt="Heap Array" class="img-fluid border-black">
-            <p class="image-caption">Array Representation</p>
+        <p class="text-indent">
+          In Step 1, we have a valid max-heap before any insertion is done. In Step 2, we insert a new node with value 10 at the next available position, which is the right child 
+          of node 7. This preserves the complete binary tree structure. However, the max-heap property is now broken since 10 is larger than its parent, and also larger than 
+          the root node 9. To fix this, we perform <i>max-heapify</i> starting from the new node. The node value "bubbles up" the tree by swapping with its parent at each level until the heap is restored.
+        </p>
+        
+        <p class="text-indent">
+          Step 3 shows the result after <i>max-heapify</i> finishes. The node 10 is now the root of the heap, and the max-heap property is restored.
+          If we were to insert another element, it would go as the left child of 6, which is the next available index.
+        </p>
+        
+        <div class="p-3 mb-4 rounded border border-dark bg-light text-dark" style="background-color: #f8f9fa;">
+          <strong>Note:</strong> Insertion in a max-heap has a time complexity of O(log n),
+          because the inserted element may need to bubble up all the way to the root.
         </div>
+        
+      </div>
+  </div>
+  
+    <!-----------------------------------------------------------Deletion Start----------------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Heap operations: Deletion</h3>
+        <p class="text-indent">
+          Deletion is a bit more involved than insertion, and it’s a key operation used in heap sort.
+          When deleting from a max-heap, we’re always removing the root, which is the largest element.
+          To do this, we swap the root node with the last node in the heap, remove that last node,
+          and then perform <i>max-heapify</i> on the new root to restore the heap.
+          This process maintains the structure of a complete binary tree while fixing any violations of the heap property.
+          Here's what that looks like:
+        </p>
+        
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heapDelete_step1.png" alt="Heap before deletion" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 1: Original heap with 9 as the root</p>
+            </div>
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heapDelete_step2.png" alt="Swap root with last node" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 2: Swap root with last node (3), remove 9</p>
+            </div>
+            <div class="col-md-4">
+              <img src="/static/learnApp/images/heap_complete_visual.png" alt="Heap after max-heapify" class="img-fluid border-black fixed-size">
+              <p class="image-caption text-muted small">Step 3: Perform max-heapify to restore heap</p>
+            </div>
+          </div>
+        </div>
+        
+        <p class="text-indent">
+          In Step 1, we start with a proper max-heap where the root node is 9. This is the element we want to delete. In Step 2, we swap 9 with the last node, which is 3. 
+          After the swap, 9 is removed from the heap completely. The structure is still a complete binary tree, but the max-heap property is now broken.
+        </p>
+        
+        <p class="text-indent">
+          In Step 3, we call <i>max-heapify</i> on the new root node, which is 3. It compares with its children and sinks down the tree until the heap property is restored.
+          In this case, 3 is smaller than both 8 and 7, so it ends up as the right child of 7. The final heap is once again a proper max-heap.
+        </p>        
+      </div>
     </div>
-</div>
+    <!-----------------------------------------------------------Deletion End------------------------------------------------------------------------------------------------------------->
+  
+    <!-----------------------------------------------------------Heap Sort Start----------------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Heap Sort</h3>
 
-
-<p>
-    <i><b>Note:</b></i> When looking at a node on a heap, you can determine its array index by the following:
-</p>
-
-
-<div class="container text-center my-4">
-    <img src="/static/learnApp/images/heap_array_computation.png" alt="Heap-Array computation image" class="img-fluid border-black">
-    <p class="image-caption">This image is from the <i>Introduction to Algorithms by Thomas H_ Cormen</i> book.</p>
-</div>
-
-
-<p style="text-indent: 30px;">
-    There are two main types of heaps:
-</p>
-
-<ul style="margin-left: 40px;">
-    <li><b><u>Max Heap:</u></b> The key at each node is greater than or equal to its children, and the root node contains the max element.</li>
-    <li><b><u>Min Heap:</u></b> The key at each node is smaller than or equal to its children, and the root node contains the min element.</li>
-</ul>
-
-
-<p style="text-indent: 30px;">
-    There are also two main approaches to building a heap:
-</p>
-
-<ul style="margin-left: 40px;">
-    <li><b><u>Top down approach:</u></b> Given an array, a heap can be constructed by inserting an element one at a time. At each insertion, perform  <i>Max-heapify</i> to maintain the max heap property.</li>
-    <li><b><u>Bottom up approach:</u></b> Given an array, construct a heap in accordance to the initial array, then perfrom <i>max-heapify</i> starting from the end of the heap to maintain the max-heap.</li>
-</ul>
-
-
-<!-----------------------------------------------------------Exercise Start----------------------------------------------------------------------------------------------------------->
-<h3 style="text-align: center;"> Exercises </h3>
-
-<p style="text-align: center;">The following 3 images are exercises, and the objective is to indentify what is a heap, and what is not. Try it!</p>
-
-<!-----------------------------------------------------------Exercise End------------------------------------------------------------------------------------------------------------->
-
-
-<div class="container">
-    <div class="row text-center">
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heap_example1.png" alt="Exercise 1" class="img-fluid border-black fixed-size">
-            <p class="image-caption"><u>Exercise 1</u>: <strong>Not</strong> a heap, does not satisfy either heap property</p>
+        <p class="text-indent">
+          Heap Sort is a comparison-based sorting algorithm that uses the heap data structure to sort an array in-place. It only makes sense once you understand how heaps work, 
+          which is why we’ve built up to it through the previous sections.
+        </p>
+        
+        <p class="text-indent">
+          The idea is simple. Turn the array into a max-heap so the largest value is always at the root. Then keep swapping the root with the last unsorted element, shrink the heap, 
+          and fix it using <i>max-heapify</i>. Repeat that until everything is sorted.
+        </p>
+        
+        <p class="text-indent">
+          Heap Sort doesn’t use recursion like merge sort or quicksort. It works directly on the array using index math and the heap operations already covered. There’s no extra 
+          memory involved, and every step is handled in-place.
+        </p>               
+        
+        <div class="container text-center my-4">
+          <img src="/static/learnApp/images/heap_sort_visual.png" alt="Heap sort visual" class="img-fluid border-black">
+          <p class="image-caption text-muted small">
+            This image comes from the <span class="fst-italic fw-semibold text-dark">Introduction to Algorithms by Thomas H. Cormen</span> book on page 168.
+          </p>
         </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heap_example2.png" alt="Exercise 2" class="img-fluid border-black fixed-size">
-            <p class="image-caption"><u>Exercise 2</u>: <em>Is</em> a heap</p>
-        </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heap_example3.png" alt="Exercise 3" class="img-fluid border-black fixed-size">
-            <p class="image-caption"><u>Exercise 3</u>: <strong>Not</strong> a heap, only the very last node can be missing from a heap</p>
-        </div>
+        
+        <p class="text-indent">
+          The image above shows the full heap sort process. We begin with a max-heap where the largest value is at the root. Each step removes that root, places it into its 
+          final position, and restores the heap. The visual tracks the heap shrinking and the array filling with sorted values from right to left.
+        </p>
+        
+        <p class="text-indent">
+          Here's what each part of the visual represents:
+        </p>
+        
+        <ul class="ms-4">
+            <li><b>(a)</b>: The original unsorted array has been converted into a valid max-heap. 16 is at the root and we are ready to begin heap sort.</li>
+          
+            <li><b>(b)</b>: Swap 16 with the last element (1). 16 is now removed and placed into the sorted section. Heapify has already been applied. 14 is the new root.</li>
+          
+            <li><b>(c)</b>: Swap 14 with 2. 14 is now in its final position. Heapify has already finished. 10 is at the top.</li>
+          
+            <li><b>(d)</b>: Swap 10 with 3. 10 is sorted. Heapify has been done and 9 becomes the new root.</li>
+          
+            <li><b>(e)</b>: Swap 9 with 1. 9 is placed in the sorted region. Heapify was applied and 8 is now the root.</li>
+          
+            <li><b>(f)</b>: Swap 8 with 2. 8 is sorted. Heapify brings 7 to the root.</li>
+          
+            <li><b>(g)</b>: Swap 7 with 1. 7 is now in the sorted portion. Heapify puts 4 at the root.</li>
+          
+            <li><b>(h)</b>: Swap 4 with 2. 4 is sorted. Heapify places 3 at the root.</li>
+          
+            <li><b>(i)</b>: Swap 3 with 1. 3 is moved to the sorted area. Heapify brings 2 to the top.</li>
+          
+            <li><b>(j)</b>: Swap 2 with 1. 2 is now sorted. The heap has only two elements left.</li>
+          
+            <li><b>(k)</b>: Final result. The array is sorted in-place from left to right: [1, 2, 3, 4, 7, 8, 9, 10, 14, 16]</li>
+          </ul>                 
+      </div>
     </div>
-</div>
-
-
-<!-----------------------------------------------------------------------Heapify Start-------------------------------------------------------------------------------------------->
-<br><h3 style="text-align: center;"> Maintaing Heap property </h3>
-<p style="text-indent: 30px;">
-    When discussing the methods for building a heap, you might recall the term "Max-heapify" being thrown around, but what exactly is that? <i>Max-heapify</i> helps maintain a property 
-    knwon as the max-heap property where for every node <i>i</i> other than the root, the value of a node is at most the value of its parent. Meaning the largest element is stored at the 
-    root, and the subtrees rooted at a node contain values no larger than that contained at the node itself. When Max-heapify is called, it assumes that the left(l) and right(r) child nodes
-    are max heaps and that the root(i) might be smaller, breaking the heap property. When this occurs, max-heapify lets the node value i, "sink" in the heap until the max heap property 
-    is satisfied. This done through recursion, Max-heapfiy calls itself recursively on the affected subtree, and this is the most common way to implement this operation, and although
-    iterative implementaions are possible, it will not be discussed here.
-</p><br>
-<!-----------------------------------------------------------------------Heapify Ends-------------------------------------------------------------------------------------------->
-
-
-<!-----------------------------------------------------------------------Insertion Start-------------------------------------------------------------------------------------------->
-<h3 style="text-align: center;">Heap operations: Insertion</h3>
-<p style="text-indent: 30px;">
-    There are two main operations done on heap besides <i>heapify</i>, and those are insertion and deletion. Insertion is the simpler operation of the two, and is mainly a two step 
-    process. Given a heap, inserting a new element is done at the end of the heap as the last index. Once an element is inserted, perform "Max-heapify" to ensure the max-heap property 
-    is still satisfied. Here's an illustration: 
-</p>
-
-<div class="container">
-    <div class="row text-center">
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heapInsert_step1.png" alt="Heap Insert Step 1" class="img-fluid border-black fixed-size">
-            <p class="image-caption">Step 1: Insert new node at the end of heap</p>
-        </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heapInsert_step2.png" alt="Heap Insert Step 2" class="img-fluid border-black fixed-size">
-            <p class="image-caption">Step 2: Perform Max-heapify</p>
-        </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heapInsert_step3.png" alt="Heap Insert Step 3" class="img-fluid border-black fixed-size">
-            <p class="image-caption">End result</p>
-        </div>
+    <!-----------------------------------------------------------Heap Sort End------------------------------------------------------------------------------------------------------------->
+  
+    <!-----------------------------------------------------------Time Complexity Start---------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title text-center">Runtime</h2>
+        <table class="w-50 mx-auto" style="border-collapse: collapse; border: 2px solid black;">
+          <thead>
+            <tr>
+              <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Case</th>
+              <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Time Complexity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">Best</td>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+            </tr>
+            <tr>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">Average</td>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+            </tr>
+            <tr>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">Worst</td>
+              <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
+    <!-----------------------------------------------------------Time Complexity End---------------------------------------------------------------------------------------------------->
+  
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center">Analysis</h3>
 
-
-<p style="text-indent: 30px;">
-    The illustration is broken down into 3 steps. In Step 1, insert the node into the heap, and any new node insertion must be done at the end of the heap in order to maintain structure.
-    In step 2, we perform the max-heapify operation on the heap to restore heap property, since the insertion of node element 10, the root element is no longer the largest in the heap.
-    After performing max-heapifu, the result is the image in step 3 where 10 is now the root element, and if a new node were to be inserted, that element would be placed as the left child 
-    of node element 6.
-</p><br>
-
-<!-----------------------------------------------------------------------Insertion ends---------------------------------------------------------------------------------------------->
-
-
-<!-----------------------------------------------------------------------Deletion Start-------------------------------------------------------------------------------------------->
-<h3 style="text-align: center;">Heap operations: Deletion</h3>
-<p style="text-indent: 30px;">
-    Deletion is a bit more complicated, and its a key operation done in heap sort. Given a heap, exchange the root's key with the last key of the heap, and decrease the heap's size 
-    by 1. Perform "Max-heapify" to ensure the max-heap property is still satisfied. Here's an illustration:
-</p>
-
-<div class="container">
-    <div class="row text-center">
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heap_complete_visual.png" alt="Heap for deletion" class="img-fluid border-black fixed-size">
-            <p style="text-align: center;"> Figure 1</p>
-        </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heapDelete_step1.png" alt="Heap deletion Step 2" class="img-fluid border-black fixed-size">
-            <p style="text-align: center;"> Figure 2</p>
-        </div>
-
-        <div class="col-md-4">
-            <img src="/static/learnApp/images/heapDelete_step2.png" alt="Heap deletion Step 3" class="img-fluid border-black fixed-size">
-            <p style="text-align: center;"> Figure 3</p>
-        </div>
-    </div>
-</div>
-
-
-<p style="text-indent: 30px;">
-    Figure 2.1 starts with a heap structuren, and to perform one delete operation, we must delete the last node 3. Figure 2.2 swaps nod 3, with the root node, 9, and the connection 
-    to the node is removed, since each time a "deletion" happens, the heap size decreases by one. In figure 2.3, max-heapify is performed to ensure the the heap property is satified.
-</p><br>
-<!-----------------------------------------------------------------------Deletion ends---------------------------------------------------------------------------------------------->
-
-
-<!----------------------------------------------------------------Heap Sort Start---------------------------------------------------------------------------------------------------->
-<h3 style="text-align: center;">Heap Sort</h3>
-
-<p style="text-indent: 30px;">
-    Finally, we get to heap sort, and its taken a while because heap sort requires a good understanding of heap operations, and now lets begin. 
-    <i>Heap Sort</i> is a comparison-based sorting algorithm that uses the heap data structure. It begins by building a max-heap from the input array, ensuring that the largest element is 
-    at the root of the heap. The sorting process then repeatedly swaps the root element (the largest element) with the last element of the heap, essentially removing it from the heap
-    and placing it in its correctly sorted position in the array. After each swap, the heap size is reduced by one, and the heapify operation is applied to the root to restore the 
-    max-heap property. This process continues until the heap is reduced to a single element, resulting in a fully sorted array. The procedure basically follows the delete and max-heapify
-    operations, and here's a nice visual of this sorting algorithm in action:
-</p>
-
-
-<div class="container text-center my-4">
-    <img src="/static/learnApp/images/heap_sort_visual.png" alt="Heap sort visual" class="img-fluid border-black">
-    <p class="image-caption">This image comes from the the <i>Introduction to Algorithms by Thomas H. Cormen</i> book on page 168:</p>
-</div>
-
-<p style="text-indent: 30px;">
-    Breaking down the image, <i>(a)</i> presents a max heap with 16 as the root node. The first step is to swap 16 with the last node, i.e., 1, and then restore the heap property. 
-    Figure <i>(b)</i> does the process where 16 is swapped, and the heap size decreases by one hence why 16 is not connected to the heap, and 1 was at the root, but since max-heapify 
-    is performed, the heap property is restored where the new root element is 14. Proceeding to figure <i>(c)</i>, the root node is swapped with the last element, the heap size 
-    decreases by one again, and max-heapify is performed leaving 10 as the new root element. This procedure follows for the rest of the figures, and it's once we get to the last node,
-    since it would already be in its correct position in a sorted array. The final result is a fully sorted array presented in figure <i>(k)</i>. 
-</p><br>
-<!----------------------------------------------------------------Heap Sort End------------------------------------------------------------------------------------------------------>
-
-
-<!-----------------------------------------------------------Time Complexity Start---------------------------------------------------------------------------------------------------->
-<div class="text-center">
-    <h3>Time Complexity:</h3>
-    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
-        <li><strong>Best case:</strong> O(nlogn)</li>
-        <li><strong>Worst case:</strong> O(nlogn)</li>
-        <li><strong>Average case:</strong> O(nlogn)</li>
-    </ul>
-</div><br>
-<!-----------------------------------------------------------Time Complexity End---------------------------------------------------------------------------------------------------->
-
-<h3 style="text-align: center;">Analysis</h3>
-
-<p style="text-indent: 30px;">
-    Like merge sort, heapsort has a runtime of O(nlogn) and like insertion sort, heapsort sorts in place, meaning only a constant number of array elements are stored outside of the input array at any given time. 
-    Taking the best attributes from merge sort and insertion sort, we get an efficient sorting algorithm. However, this sorting algorithm still gets outperformed in practice by a 
-    well-implemented quick sort algorithm, but why exactly is the runtime of heapsort O(nlogn).
-</p>
-
-<p style="text-indent: 30px;">
-    Heapsort gets its O(nlogn) runtime from building the initial heap and then performing max-heapify. Recall that building a max heap takes O(n) times, where n is the number of
-    vertices. Once a max-heap is set up, max-heapify takes O(logn) time, and it makes n-1 calls. Putting the two together gives us the expected runtime. It is also worth noting, that 
-    the insert and delete operations are O(logn) since the key comparisons made after the operations are done can not be more than twice the heap's height which is log n.
-</p>
-
-<p><b><u>Space Complexity</u></b>:
-Heapsort is an in-place alogrithm, unlike merge sort. This means the heapsort algorithm requires no extra space and has a space complexity of O(1).
-</p>
+        <p class="text-indent">
+          Like merge sort, heapsort has a runtime of O(nlogn), and like insertion sort, heapsort sorts in place,
+          meaning only a constant number of array elements are stored outside of the input array at any given time.
+          Taking the best attributes from merge sort and insertion sort, we get an efficient sorting algorithm.
+          However, this algorithm still gets outperformed in practice by a well-implemented quicksort.
+          So why exactly is the runtime of heapsort O(nlogn)?
+        </p>
+        
+        <p class="text-indent">
+          Heapsort gets its O(nlogn) runtime from building the initial heap and then performing max-heapify.
+          Recall that building a max-heap takes O(n) time, where n is the number of elements.
+          Once the heap is set up, max-heapify takes O(logn) time and is called n - 1 times.
+          Putting the two together gives us the expected runtime.
+          It is also worth noting that the insert and delete operations are O(logn),
+          since the number of comparisons made after those operations is at most the height of the heap, which is log n.
+        </p>
+        
+        <p class="text-indent">
+          One thing that makes heapsort unique is that its performance doesn’t depend on the input.
+          Best, average, and worst cases all run in the same time.
+          That consistency is a strength compared to quicksort, which can degrade depending on how balanced the partitions are.
+          But heapsort is still slower in practice because of poor cache performance due to all the jumps in memory.
+          It’s also not a stable sort, so if the input contains duplicate values, their original order won’t be preserved.
+        </p>
+        
+        <p><b>Space Complexity:</b> Heapsort is an in-place algorithm, unlike merge sort.
+        This means it doesn’t require any extra memory beyond the input array,
+        so its space complexity is O(1).</p>        
+      </div>
+    </div><br>

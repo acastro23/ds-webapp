@@ -9,6 +9,10 @@ import os
 ALGORITHM_QUIZ_MAPPING = {
     "heap-sort": 1,
     "bfs": 2,
+    "bubble-sort": 4,
+    "selection-sort": 5,
+    "merge-sort": 6,
+    "quick-sort": 7,
 }
 
 

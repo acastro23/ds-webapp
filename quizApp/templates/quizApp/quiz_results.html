@@ -1,5 +1,4 @@
 {% extends 'ds_app/base.html' %}
-
 {% block content %}
 
 <div class="container text-center mt-5">
@@ -45,12 +44,10 @@
     document.addEventListener("DOMContentLoaded", function () {
         let scorePercentage = parseInt("{{ score_percentage|default:'0' }}".replace('%', ''));
 
-        // Set Progress Bar
         let progressBar = document.getElementById("progress-bar");
         progressBar.style.width = scorePercentage + "%";
         progressBar.setAttribute("aria-valuenow", scorePercentage);
 
-        // Set Score Box Color
         let scoreBox = document.getElementById("score-box");
         if (scorePercentage >= 80) {
             scoreBox.classList.add("bg-success");
@@ -60,7 +57,6 @@
             scoreBox.classList.add("bg-danger");
         }
 
-        // Set Message
         let scoreMsg = document.getElementById("message");
         let subText = document.getElementById("message-subtext");
         if (scorePercentage >= 80) {
@@ -78,5 +74,4 @@
         }
     });
 </script>
-
 {% endblock %}

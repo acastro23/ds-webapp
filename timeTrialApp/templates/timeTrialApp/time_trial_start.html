@@ -2,13 +2,38 @@
 {% block title %}Time Trial Quiz{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Time Trial Quiz</h1>
-    <p class="text-center">Complete the quiz as fast as possible!</p>
+<style>
+    .fixed-size-choice {
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+        transition: all 0.25s ease;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
 
-    <div class="text-center">
-        <h3>Timer: <span id="timer">120</span> seconds</h3>
-    </div>
+    .btn-outline-dark:hover.fixed-size-choice {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa;
+    }
+
+    .btn-check:checked + .btn-outline-dark.fixed-size-choice {
+        background-color: #212529;
+        color: white;
+        border-color: #212529;
+        transform: scale(1.02);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+
+<div class="container mt-5 text-center">
+    <h2 class="fw-bold">Time Trial</h2>
+    <h4 class="mb-4">Timer: <span id="timer">120</span> seconds</h4>
 
     <form id="quizForm" method="POST" action="{% url 'timeTrialApp:time-trial-submit' %}">
         {% csrf_token %}
@@ -17,23 +42,28 @@
 
         <div id="question-container">
             {% for question_id, question in questions.items %}
-                <div class="question-container mt-4 question" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
-                    <h4>{{ question.question_text }}</h4>
-                    {% for answer_id, answer_text, is_correct in question.answers %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="question_{{ question_id }}" value="{{ answer_id }}" 
-                                   id="answer_{{ answer_id }}" data-correct="{{ is_correct }}">
-                            <label class="form-check-label" for="answer_{{ answer_id }}">
-                                {{ answer_text }}
-                            </label>
-                        </div>
-                    {% endfor %}
+                <div class="question-container question" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
+                    <h4 class="mb-4">{{ question.question_text }}</h4>
+                    <div class="row justify-content-center">
+                        {% for answer_id, answer_text, is_correct in question.answers %}
+                            {% if forloop.counter0|divisibleby:2 %}
+                                <div class="w-100 mb-3"></div>
+                            {% endif %}
+                            <div class="col-md-4 mb-3">
+                                <input type="radio" class="btn-check" name="question_{{ question_id }}" value="{{ answer_id }}" 
+                                       id="answer_{{ answer_id }}" autocomplete="off" data-correct="{{ is_correct }}">
+                                <label class="btn btn-outline-dark w-100 py-3 fixed-size-choice" for="answer_{{ answer_id }}">
+                                    {{ answer_text }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
 
         <div class="text-center mt-4">
-            <button type="button" id="prev-btn" class="btn btn-secondary" disabled>Previous</button>
+            <button type="button" id="prev-btn" class="btn btn-secondary me-2" disabled>Previous</button>
             <button type="button" id="next-btn" class="btn btn-secondary">Next</button>
             <button type="submit" id="submit-btn" class="btn btn-dark" style="display: none;">Submit Time Trial</button>
         </div>
@@ -41,34 +71,44 @@
 </div>
 
 <script>
-    let time = 120; 
+    let time = 120;
+    const timerElement = document.getElementById("timer");
+    const quizForm = document.getElementById("quizForm");
+
+    function fillHiddenFields() {
+        console.log("CALLED fillHiddenFields()");
+        document.getElementById("completion_time").value = 120 - time;
+
+        let correctAnswers = 0;
+        document.querySelectorAll("input[type=radio]:checked").forEach(input => {
+            console.log("Checked Answer:", input.value, "Correct?", input.dataset.correct);
+            if (input.dataset.correct === "true" || input.dataset.correct === "True") {
+                correctAnswers++;
+            }
+        });
+        console.log("Final correct answers:", correctAnswers);
+        document.getElementById("correct_answers").value = correctAnswers;
+    }
+
     let timerInterval = setInterval(() => {
-        document.getElementById("timer").innerText = time;
+        timerElement.innerText = time;
         if (time <= 0) {
             clearInterval(timerInterval);
-            document.getElementById("quizForm").submit();
+            fillHiddenFields();
+            quizForm.requestSubmit();
         } else {
             time--;
         }
     }, 1000);
 
-    document.getElementById("quizForm").addEventListener("submit", function() {
+    quizForm.addEventListener("submit", function () {
         clearInterval(timerInterval);
-        document.getElementById("completion_time").value = 120 - time;
-
-        let correctAnswers = 0;
-        document.querySelectorAll("input[type=radio]:checked").forEach(input => {
-            if (input.dataset.correct === "true") { 
-                correctAnswers++;
-            }
-        });
-
-        document.getElementById("correct_answers").value = correctAnswers;
+        fillHiddenFields();
     });
 
     let questions = document.querySelectorAll(".question");
     let currentQuestion = 0;
-    
+
     function showQuestion(index) {
         questions.forEach((q, i) => {
             q.style.display = i === index ? "block" : "none";
@@ -94,5 +134,4 @@
     });
     showQuestion(0);
 </script>
-
 {% endblock %}

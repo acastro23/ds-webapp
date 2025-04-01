@@ -8,28 +8,68 @@ def quiz_home(request):
             This method is for the home page of our quiz app. So, like with the 'learn-home' page, this should display a list of all the quizzes our application offers,
             What the user should see from this list is the title of the quiz which is pulled from the database.
     """
+    user_id = request.session.get("user_id")
+
     with connection.cursor() as myCursor:
         myCursor.execute("SELECT quiz_id, title FROM quizzes")
         quizzes = myCursor.fetchall()
-    return render(request, 'quizApp/quiz_home.html', {'quizzes': quizzes})
+
+        user_scores = {}
+        if user_id:
+            myCursor.execute("SELECT quiz_id, score FROM scores WHERE user_id = %s", [user_id])
+            user_scores = dict(myCursor.fetchall())
+        
+        quiz_list = [
+            {"id": quiz[0], "name": quiz[1], "score": user_scores.get(quiz[0], None)}
+            for quiz in quizzes
+        ]
+        return render(request, 'quizApp/quiz_home.html', {"quizzes": quiz_list})
 
 
 def quiz_detail(request, quiz_id):
-    """AC02072025:
-            The 'quiz_detail' method fetches the content of the quiz from the database and renders it to the 'quiz_detail.html' page
-    """
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return redirect('quizApp:quiz-home')
+
+    stats = {
+        "user_score": None,
+        "user_attempts": None,
+        "avg_score": None,
+        "total_attempts": None,
+    }
+
     with connection.cursor() as myCursor:
         myCursor.execute("SELECT title, description FROM quizzes WHERE quiz_id = %s;", [quiz_id])
         quiz = myCursor.fetchone()
-    
-    if quiz:
-        return render(request, 'quizApp/quiz_detail.html', {'quiz': quiz, 'quiz_id': quiz_id})      # this page is just a preview page, not the actual quiz page where the user answers questions
-    else:
-        return render(request, 'quizApp/quiz_not_found.html', status=404)
+
+        if not quiz:
+            return render(request, 'quizApp/quiz_home.html', status=404)
+
+        myCursor.execute("""
+            SELECT score, attempts FROM scores
+            WHERE user_id = %s AND quiz_id = %s;
+        """, [user_id, quiz_id])
+        result = myCursor.fetchone()
+        if result:
+            stats["user_score"], stats["user_attempts"] = result
+
+        myCursor.execute("SELECT AVG(score), SUM(attempts) FROM scores WHERE quiz_id = %s;", [quiz_id])
+        result = myCursor.fetchone()
+        if result:
+            stats["avg_score"], stats["total_attempts"] = result
+    return render(request, 'quizApp/quiz_detail.html', {
+        'quiz': quiz,
+        'quiz_id': quiz_id,
+        'stats': stats
+    })   
     
 
 def quiz_start(request, quiz_id):
     with connection.cursor() as myCursor:
+        myCursor.execute("SELECT title FROM quizzes WHERE quiz_id = %s;", [quiz_id])
+        result = myCursor.fetchone()
+        quiz_title = result[0] if result else "Quiz"
+
         myCursor.execute("SELECT question_id, question_text FROM questions WHERE quiz_id = %s;", [quiz_id])
         questions_data = myCursor.fetchall()
 
@@ -44,9 +84,10 @@ def quiz_start(request, quiz_id):
             """, [q_id])
             answers = myCursor.fetchall()
         questions[q_id] = {"question_text": q_text, "answers": answers}
+
     return render(request, 'quizApp/quiz_start.html', {
         'quiz_id': quiz_id,
-        'quiz_title': f"Quiz {quiz_id}",
+        'quiz_title': quiz_title,
         'questions': questions
     })
 
@@ -84,7 +125,6 @@ def quiz_submit(request, quiz_id):
                 WHERE q.quiz_id = %s AND a.is_correct = TRUE;
             """, [quiz_id])
             correct_answers = {row[0]: row[1] for row in myCursor.fetchall()}
-
         score = sum(1 for q_id, a_id in user_answers.items() if correct_answers.get(q_id) == a_id)
 
         with connection.cursor() as myCursor:
@@ -96,7 +136,6 @@ def quiz_submit(request, quiz_id):
             """, [user_id, quiz_id, score])
 
         return redirect('quizApp:quiz-results', quiz_id=quiz_id, score=score)
-
     return redirect('quizApp:quiz-home')
 
 

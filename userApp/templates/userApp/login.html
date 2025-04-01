@@ -2,30 +2,44 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Login</h1>
 
-    <div id="error-message" class="alert alert-danger d-none"></div>
+<div class="container d-flex flex-column align-items-center justify-content-center pt-5 pb-4">
 
-    <form id="loginForm" method="POST" action="{% url 'userApp:login-user' %}">
-        {% csrf_token %}
-        
-        <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+ 
+    <div class="text-center mb-4 pb-2 border-bottom" style="max-width: 400px; width: 100%;">
+        <h2 class="fw-bold mb-1">StrucTutor</h2>
+        <h4 class="mb-1">Login</h4>
+        <p class="text-muted mb-0">Good to see you again!</p>
+    </div>
+
+
+    <div class="p-4 border border-dark rounded shadow-sm" style="width: 300px;">
+        <div id="error-message" class="alert alert-danger d-none"></div>
+
+        <form id="loginForm" method="POST" action="{% url 'userApp:login-user' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="email" class="form-label">email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-dark w-100">Login</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'userApp:register-page' %}" class="text-decoration-none">Don't have an account?</a>
         </div>
-    
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" name="password" class="form-control" required>
-        </div>
-    
-        <div class="text-center">
-            <button type="submit" class="btn btn-dark">Login</button>
-        </div>
-    </form>    
-       
+    </div>
 </div>
+
 
 <script>
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
@@ -55,5 +69,4 @@
         }
     });
 </script>
-
 {% endblock %}

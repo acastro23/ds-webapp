@@ -1,11 +1,55 @@
 {% extends "ds_app/base.html" %}
-{% block title %}Time Trial Mode{% endblock %}
+{% block title %}Time Trial{% endblock %}
 
 {% block content %}
 <div class="container mt-5 text-center">
-    <h1>Welcome to Time Trials!</h1>
-    <p>Answer as many questions as quickly as possible! After your done, you can check your placement on the leaderboard!</p>
+    <h1 class="fw-bold">Welcome to Time Trials!</h1>
+    <p class="lead">Answer as many questions as quickly as possible! After you're done, you can check your placement on the leaderboard.</p>
 
-    <a href="{% url 'timeTrialApp:time-trial-start' %}" class="btn btn-dark">Start Time Trial</a>
+
+    <div class="row justify-content-center g-4 mt-5">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="fw-semibold">Goal</h5>
+                    <p class="text-muted">Answer as many questions correctly in under 2 minutes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="fw-semibold">Timer</h5>
+                    <p class="text-muted">Each attempt gives you 120 seconds. Once time's up, your score is recorded.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="fw-semibold">Leaderboard</h5>
+                    <p class="text-muted">Rankings prioritize most correct answers, then fastest time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="my-5">
+        <a href="{% url 'timeTrialApp:time-trial-start' %}" class="btn btn-dark btn-lg px-5">Start Time Trial</a>
+    </div>
+
+
+    <div class="row justify-content-center" style="margin-top: 10rem !important;">
+        <div class="col-md-6">
+            <a href="{% url 'leaderboardApp:leaderboard-home' %}" class="text-decoration-none">
+                <div class="card shadow-sm border-dark">
+                    <div class="card-body text-center py-3">
+                        <h6 class="fw-semibold text-dark mb-0">Check the leaderboard standings here</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,19 +1,43 @@
 {% extends "ds_app/base.html" %}
-
 {% block title %}Learn{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Learn Algorithms</h1>
-    <ul class="list-group mt-4">
-        {% for algorithm in algorithm_list %}
-            <li class="list-group-item text-center">
-                <a href="{% url 'learnApp:algorithm-detail' algorithm.slug %}">{{ algorithm.name }}</a>
-            </li>
-        {% empty %}
-            <li class="list-group-item">No algorithms available.</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+<div class="container my-5">
+  <h1 class="text-center fw-bold display-5">Explore Algorithms</h1>
+  <p class="lead text-center mb-4">
+    Click any algorithm to dive into explanations, code examples, and quizzes.
+  </p>
 
+  <h4 class="text-center fw-semibold mb-4 text-uppercase" style="letter-spacing: 1px; color: #555;">Available Topics</h4>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    {% for algorithm in algorithm_list %}
+      <div class="col">
+        <div class="card algo-card border border-dark h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <h5 class="card-title mb-2">
+              <a href="{% url 'learnApp:algorithm-detail' algorithm.slug %}"
+                 class="text-dark fw-semibold text-decoration-none">
+                {{ algorithm.name }}
+              </a>
+            </h5>
+            
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+<style>
+  .algo-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .algo-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+  }
+</style>
+{% endblock %}

@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'learnApp.apps.LearnappConfig',
     'quizApp.apps.QuizappConfig',
     'timeTrialApp.apps.TimetrialappConfig',
+    'leaderboardApp.apps.LeaderboardappConfig'
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

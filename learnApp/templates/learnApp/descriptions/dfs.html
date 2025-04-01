@@ -1,61 +1,114 @@
-<h3>Depth-first Search Introduction</h3>
+<div class="container py-4" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.05rem;">
 
-<p style="text-indent: 30px;">
-    Depth-first Search, as the name implies, searches 'deeper' into a graph, whenever possible. Recall, that when breadth-first search visits a new vertex, it'll explore 
-    all its adjacent vertices before visiting the next. DFS, works the opposite, where DFS will visit a vertex and go deep before 'back-tracking'. This concept of graph traversal
-    is important as DFS yields valuable information about the structure of a graph, and has many applications such as:
-</p>
+  <!-- AC03012025 -- Summary of what graphs are and how they are represented -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center">Recap -- What are Graphs?</h3>
+      <p style="text-indent: 30px;">
+        Graphs are abstract data structures that represent complex, non-linear relationships. They are important in allowing us to depict how various elements are linked to one another. Visually, they are a collection of points on a plane where those points are called <i>Vertices</i> or <i>nodes</i>. Some nodes are connected by line segments called <i>edges</i> or <i>arcs</i>.
+      </p>
+      <div class="p-3 mb-4 rounded border border-dark bg-light text-dark">
+        <strong>Note:</strong> Graphs are either directed or undirected, check the figure below
+      </div>
+      <!-- AC03012025 -- POSSIBLE IMAGE OF DIRECTED/UNDIRECTED GRAPH VISUAL GOES HERE -->
+      <p style="text-indent: 30px;">
+        Graphs, which are usually represented as G = (V, E), where |V| represents the number of vertices and |E| represents the number of edges, have two standard ways of being represented. Those two ways being an <i>adjacency list</i> and a <i>matrix</i>. For DFS, and other related graph algorithms, we'll assume that the input graph is an adjacency list, but below are all the standard ways of representing a graph:
+      </p>
+      <!-- AC03012025 -- POSSIBLE IMAGE OF GRAPH REPRESENTATION VISUAL GOES HERE -->
+    </div>
+  </div>
 
-<ul style="margin-left: 40px;">
-    <li> Checking connectivity, i.e., finding connected components</li>
-    <li>Finding articulation points and biconnected components</li>
-    <li>Checking acyclity</li>
-    <li>Searching State-space of problem for solution(AI)</li>
-</ul>
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center">Depth-first Search Introduction</h3>
 
-<p><b><u>Note</u></b>: Depth-first search is the main idea behind the <i>topological sorting algorithm</i></p>
+      <p style="text-indent: 30px;">
+          Depth-first Search, as the name implies, searches 'deeper' into a graph, whenever possible. Recall, that when breadth-first search visits a new vertex, it'll explore 
+          all its adjacent vertices before visiting the next. DFS, works the opposite, where DFS will visit a vertex and go deep before 'back-tracking'. This concept of graph traversal
+          is important as DFS yields valuable information about the structure of a graph, and has many applications such as:
+      </p>
 
+      <ul style="margin-left: 40px;">
+          <li> Checking connectivity, i.e., finding connected components</li>
+          <li>Finding articulation points and biconnected components</li>
+          <li>Checking acyclity</li>
+          <li>Searching State-space of problem for solution(AI)</li>
+      </ul>
 
-<h3>Depth-first search procedure</h3>
+      <div class="p-3 mt-4 rounded border border-dark bg-light text-dark">
+        <strong>Note:</strong> Depth-first search is the main idea behind the <i>topological sorting algorithm</i>
+      </div>
+    </div>
+  </div>
 
-<p style="text-indent: 30px;">
-    Depth-first search starts at an arbitrary vertex <i>v</i> and explores the edges out its adjacent vertex that still has unexplored edges, i.e., on each iteration, DFS proceeds 
-    to an unvisited vertex until it reaches a dead end. Once a dead end is reached, the search "backtracks" one edge to the vertex it came from and tries to continue visiting 
-    unvisited vertices from there. This procedure continues until all vertices that are reachable from the original source vertex have been discoverd. If any unvisited vertices remain in the graph, then DFS will 
-    select one of them as the new source, repeating the search from that Source, and repeats until all vertices have been discovered.
-</p>
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center">Depth-first search procedure</h3>
 
-<p style="text-indent: 30px;">
-    DFS uses follows a last-in, first-out approach, using a <i>stack</i> to keep track of unvisited vertices. When DFS reaches a vertex <i>v</i> for the first time, it gets pushed 
-    into the stack. A vertex gets popped off the stack once it becomes a dead end, meaning when there are no more adjacent unvisited vertices. Below is a demonstration of DFS:
-</p>
+      <p style="text-indent: 30px;">
+          Depth-first search starts at an arbitrary vertex <i>v</i> and explores the edges out its adjacent vertex that still has unexplored edges, i.e., on each iteration, DFS proceeds 
+          to an unvisited vertex until it reaches a dead end. Once a dead end is reached, the search "backtracks" one edge to the vertex it came from and tries to continue visiting 
+          unvisited vertices from there. This procedure continues until all vertices that are reachable from the original source vertex have been discoverd. If any unvisited vertices remain in the graph, then DFS will 
+          select one of them as the new source, repeating the search from that Source, and repeats until all vertices have been discovered.
+      </p>
 
-<!--AC03022025 -- IMAGE/ANIMATION FOR DFS GOES HERE -->
+      <p style="text-indent: 30px;">
+          DFS uses follows a last-in, first-out approach, using a <i>stack</i> to keep track of unvisited vertices. When DFS reaches a vertex <i>v</i> for the first time, it gets pushed 
+          into the stack. A vertex gets popped off the stack once it becomes a dead end, meaning when there are no more adjacent unvisited vertices. Below is a demonstration of DFS:
+      </p>
 
-<p><b><u>Note</u></b>: DFS works on both directed and undirected graphs</p>
+      <!--AC03022025 -- IMAGE/ANIMATION FOR DFS GOES HERE -->
 
+      <div class="p-3 mt-4 rounded border border-dark bg-light text-dark">
+        <strong>Note:</strong> DFS works on both directed and undirected graphs
+      </div>
+    </div>
+  </div>
 
-<div class="text-center">
-    <h3>Time Complexity:</h3>
-    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
-        <li><strong>Best case:</strong> O(V + E)</li>
-        <li><strong>Worst case:</strong> O(V + E)</li>
-        <li><strong>Average case:</strong> O(V + E)</li>
-    </ul>
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title text-center">Runtime:</h2>
+      <table class="w-50 mx-auto" style="border-collapse: collapse; border: 2px solid black;">
+        <thead>
+          <tr>
+            <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Case</th>
+            <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Time Complexity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Best</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(V + E)</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Average</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(V + E)</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Worst</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(V + E)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center">Runtime Analysis</h3>
+
+      <p style="text-indent: 30px">
+          As with Breadth-first search, the time complexity of Depth-first search is determined by the number of vertices and edges in the graph. Therefore, the time complexity of DFS is 
+          O(V + E), where V represents the number of vertices and E represents the number of edges in the graph. DFS processes each node once and examines all of its edges, meaning 
+          we take O(V) time since each node will be visited at most once. When exploring the edges, in an adjacency list representation, each edge is examined once which contributes 
+          O(E) times. Together, this gives DFS a runtime of O(|V| + |E|), the same runtime as BFS with the only difference being the order in which we traverse the nodes. There are some 
+          special cases though, such as performing DFS on a tree, which has a time complexity of O(V) since E is small.
+      </p>
+
+      <p style="text-indent: 30px">
+          The space complexity of DFS depends on how the graph is represented and the recursion stack (if using recursion) or the explicit stack (if using an iterative approach). Assuming 
+          a recurisve approach, the space complexity of DFS is O(V), where V represents the number of vertices in the graph, assuming the worst case where the graph is a striaght line.
+      </p>
+    </div>
+  </div>
 </div>
-
-
-<h3>Runtime Analysis</h3>
-
-<p style="text-indent: 30px">
-    As with Breadth-first search, the time complexity of Depth-first search is determined by the number of vertices and edges in the graph. Therefore, the time complexity of DFS is 
-    O(V + E), where V represents the number of vertices and E represents the number of edges in the graph. DFS processes each node once and examines all of its edges, meaning 
-    we take O(V) time since each node will be visited at most once. When exploring the edges, in an adjacency list representation, each edge is examined once which contributes 
-    O(E) times. Together, this gives DFS a runtime of O(|V| + |E|), the same runtime as BFS with the only difference being the order in which we traverse the nodes. There are some 
-    special cases though, such as performing DFS on a tree, which has a time complexity of O(V) since E is small.
-</p>
-
-<p style="text-indent: 30px">
-    The space complexity of DFS depends on how the graph is represented and the recursion stack (if using recursion) or the explicit stack (if using an iterative approach). Assuming 
-    a recurisve approach, the space complexity of DFS is O(V), where V represents the number of vertices in the graph, assuming the worst case where the graph is a striaght line.
-</p>
