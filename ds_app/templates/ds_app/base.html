@@ -82,6 +82,7 @@
                 <a class="nav-link text-white" href="{% url 'quizApp:quiz-home' %}">Quiz</a>
                 <a class="nav-link text-white" href="{% url 'timeTrialApp:time-trial-home' %}">Time Trial</a>
                 <a class="nav-link text-white" href="{% url 'leaderboardApp:leaderboard-home' %}">Leaderboard</a>
+                <a class="nav-link text-white" href="{% url 'userApp:profile-page' %}">Profile</a>
             </div>
             <div class="nav-right">
                 {% if request.session.user_id %}

@@ -1,0 +1,53 @@
+<h2>What is Selection Sort?</h2>
+
+<!-- AC01312025 -- This section is the actual overview of the algorithm -->
+<p style="text-indent: 30px;">
+    Selection Sort is a sorting algorithm that repeatedly selects the minimum value from the unsorted portion of the array and swaps it with the first element.
+    Then, it starts with the second element and goes through the rest of the array to find the new minimum and swaps it with the second element. 
+    This process continues until the entire array is sorted.
+</p>
+
+<p style="text-indent: 30px;">
+    Selection Sort follows a brute-force approach. 
+    Brute-force algorithms check all possibilities to solve problems. 
+    Selection Sort follows this idea by scanning the unsorted portion of the array to find the smallest element and placing it in its correct position, repeating this process until the array is fully sorted. 
+</p><br>
+
+
+<!-- AC0131 -- This might be changed for animations or for including multiple 'step' images
+-->
+<h2>Example</h2>
+<div class="text-center" style="max-width: 300px;">
+    <img src="/static/learnApp/images/selectionsort1.png" alt="Selection Sort Example" class="img-fluid my-3">
+</div><br>
+
+<p style="text-indent: 30px;">
+    These are the steps to sort the array:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li><b>Minimum is 10</b> so it switches with the first element, and the pointer moves forward.</li>
+    <li><b>Minimum is 30</b> so it stays, and the pointer moves forward.</li>
+    <li><b>Minimum is 40</b> so it switches with the third element, and the pointer moves forward.</li>
+    <li><b>Minimum is 50</b> so it stays, and the pointer moves forward.</li>
+    <li><b>60 </b> is the last element.</li>
+</ul>
+
+
+<!-- AC01312025 -- Each algorithm should talk about time complexity-->
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(n²)</li>
+        <li><strong>Worst case:</strong> O(n²)</li>
+        <li><strong>Average case:</strong> O(n²)</li>
+    </ul>
+</div>
+
+<!--AC01312025 -- Along with time complexity notes, an analysis is also require for page completion -->
+<h3>Analysis:</h3>
+<p style="text-indent: 30px;">
+    The algorithm scans the entire unsorted portion of the array to find the smallest element.
+    In the first pass, it checks <strong>n</strong> elements, in the second pass <strong>(n-1)</strong> elements, then <strong>(n-2)</strong>, and so on.
+    Selection Sort is <strong>O(n²)</strong> due to the repeated full-array scans for the minimum element in each pass.
+</p>

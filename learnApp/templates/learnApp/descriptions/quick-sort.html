@@ -1,0 +1,116 @@
+<h2>What is Quick Sort?</h2>
+
+<!-- AC01312025 -- This section is the actual overview of the algorithm -->
+<p style="text-indent: 30px;">
+    Quicksort is a highly efficient and widely used sorting algorithm that follows the divide and conquer approach. 
+    It uses Hoare's Partitioning which works by selecting a pivot element from the array and partitioning the other elements into two groups: those <b>less than the pivot</b> and those <b>greater than the pivot</b>. 
+    These subarrays are then recursively sorted, and the final sorted array is obtained by combining the sorted subarrays with the pivot.
+</p>
+
+<p style="text-indent: 30px;">
+    Quicksort's performance depends on the choice of the pivot, as a well-chosen pivot leads to balanced partitions. 
+    Quicksort is one of the fastest sorting algorithms.
+</p><br>
+
+<h2>What Makes a Good Pivot?</h2>
+A good pivot results in balanced partitions—where both halves of the array have approximately equal elements. 
+The median of the array is ideal, but calculating the exact median takes extra time.<br><br>
+
+<h2>In-Place Sorting Algorithm</h2>
+<b>Quick Sort</b> is an in-place sorting algorithm, meaning it does not require extra memory proportional to the input size.
+It modifies the array directly during partitioning.<br>
+
+<b>Merge Sort</b> is NOT in-place.
+Merge Sort requires additional memory to store temporary subarrays during merging.<br></br>
+
+
+<!-- AC0131 -- This might be changed for animations or for including multiple 'step' images
+-->
+<h2>Example</h2>
+<ul style="margin-left: 40px;">
+    <li>Let <code>i = left element, j = right element, and p = pivot</code></li>
+</ul>
+
+<h3>Rule</h3>
+<ul style="margin-left: 40px;">
+    <li>i will increment until i>=p</li>
+    <li>j will decrement until j<=p</li>
+    <li>Then, swap the values at index i and j</li>
+    <li>This repeats until j<=i, at which j will swap with p</li>
+</ul>
+
+<div class="text-center" style="max-width: 250px;">
+    <img src="/static/learnApp/images/quicksort.png" alt="Quick Sort Example" class="img-fluid my-3">
+</div><br>
+
+<p style="text-indent: 30px;">
+    These are the steps to move the pivot to its correct position:
+</p>
+
+<ul style="margin-left: 40px;">
+    <li><b><code>p</code></b> is set to the first element (5), <b><code>i</code></b> is the second element (3), and <b><code>j</code></b> is the last element (7)</li>
+    <li>i moves forward until it reaches 9, and j moves backwards until it reaches 4</li>
+    <li>i and j swap places (9 and 4)</li>
+    <li>i moves forward until it reaches 8, and j moves backwards until it reaches 2</li>
+    <li>i and j swap places (8 and 2)</li>
+    <li>i moves forward until it reaches 8, and j moves backward until it reaches 2</li>
+    <li>Now, j is less than i, so j swaps places with p (2 and 5)</li>
+    <li>Finally, 5 is in its correct position in the array. However, the elements to the left of 5 and right of 5 still need sorting.</li>
+</ul>
+
+<h3>Sort the left side</h3>
+
+<div class="text-center" style="max-width: 150px;">
+    <img src="/static/learnApp/images/quicksortleft.png" alt="Quick Sort Left Example" class="img-fluid my-3">
+</div><br>
+
+<p style="font-weight: bold;">Left side final result: 1 2 3 4<p><br>
+
+<h3>Sort the right side</h3>
+
+<div class="text-center" style="max-width: 150px;">
+    <img src="/static/learnApp/images/quicksortright.png" alt="Quick Sort Left Example" class="img-fluid my-3">
+</div><br>
+
+<p style="font-weight: bold;">Right side final result: 7 8 9<p><br>
+
+<h3>Final sorted array: 1 2 3 4 5 7 8 9</h3>
+
+
+<!-- AC01312025 -- Each algorithm should talk about time complexity-->
+<div class="text-center">
+    <h3>Time Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li><strong>Best case:</strong> O(nlogn)</li>
+        <li><strong>Worst case:</strong> O(n²)</li>
+        <li><strong>Average case:</strong> O(nlogn)</li>
+    </ul>
+</div>
+
+<div class="text-center">
+    <h3>Space Complexity:</h3>
+    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
+        <li>Quick Sort uses O(log n) auxiliary space due to recursive function calls.</li>
+        <li>The depth of recursion depends on how balanced the partitions are.</li>
+        <li>Worst case (O(n) space): If the pivot consistently picks the smallest or largest element (highly unbalanced partitions).</li>
+        <li>Best case (O(log n) space): If partitions are evenly divided, leading to a balanced recursive call tree.</li>
+    </ul>
+</div>
+
+<!--AC01312025 -- Along with time complexity notes, an analysis is also require for page completion -->
+<h3>Analysis:</h3>
+<p style="text-indent: 30px;">
+    The best and average cases occur when the pivot is chosen such that it splits the array into two roughly equal halves at each step.
+    In each step, the array partitions around a pivot which results in <b>two subarrays of size n/2</b>. 
+    Each partitioning operation takes <b>O(n)></b> time because each element is compared to the pivot once.
+</p>
+<p style="text-indent: 30px;">
+    Since the array is divided in half each time, there are <b>log n</b> levels of recursion.
+</p>
+<p style="text-indent: 30px;">
+    The worst case occurs when the pivot is poorly chosen (the smallest or largest element in a sorted array).
+    Instead of splitting the array into two roughly equal parts, one side gets n-1 values (almost everything), and the other side gets 0 values (nothing).
+    Since you're only removing one value each time, you still have to go through almost the entire array to find the correct place for the pivot. 
+    So it takes <b>O(n²)</b> time because you're doing n steps, and each step takes about n comparisons.
+</p>
+

@@ -11,5 +11,6 @@ urlpatterns = [
     path("update-email/", update_email, name="update-email"),
     path("logout/", logout_user, name="logout-user"),
     path("login-page/", lambda request: render(request, "userApp/login.html"), name="login-page"),
-    path("register-page/", lambda request: render(request, "userApp/register.html"), name="register-page"), 
+    path("register-page/", lambda request: render(request, "userApp/register.html"), name="register-page"),
+    path("profile-page/", lambda request: render(request, "userApp/profile.html"), name="profile-page"),
 ]
