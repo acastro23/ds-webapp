@@ -1,190 +1,178 @@
 {% extends "ds_app/base.html" %}
 {% block title %}Profile{% endblock %}
+{% load static %}
+
 {% block content %}
-<style>
-    body {
-    font-family: sans-serif;
-    background-color: rgb(245, 245, 245);
-    margin: 0;
-    padding: 0;
-    color: rgb(25, 67, 67);
-}
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-body text-center">
 
-.containerprofile {
-    max-width: 80%;
-    margin: 50px auto;
-    padding: 50px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.159);
-    border-radius: 5px;
-}
+      <h2 class="fw-bold mb-4">Profile</h2>
 
-/* Profile Picture */
-.profile-pic {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
 
-.profile-pic img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    object-fit: cover;
-    margin-bottom: 20px;
-}
+      <label for="profile-upload" class="d-inline-block position-relative" style="cursor: pointer;">
+        <img id="profile-picture" src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="Profile Picture"
+             class="rounded-circle shadow" width="140" height="140">
+        <input type="file" id="profile-upload" class="d-none" accept="image/*">
+      </label>
 
-.profile-pic button {
-    padding: 5px 10px;
-    background: #262626;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
 
-.profile-pic button:hover {
-    background: #2f2f2f;
-}
+      <p id="username-display" class="fw-semibold mt-2 mb-3"></p>
 
-/* Bio Section */
-.bio-section {
-    flex: 1;
-}
 
-.bio-section label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
+      <div id="remove-btn-container" class="mb-3" style="display: none;">
+        <button id="remove-picture" class="btn btn-outline-danger btn-sm">Remove Profile Picture</button>
+      </div>
 
-.bio-section textarea {
-    width: 100%;
-    height: 80px;
-    resize: none;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
 
-#save-btn {
-    padding: 2px 8px;
-    background: #f6f6f6;
-    color: rgb(24, 24, 24);
-    border: 1px solid rgb(27, 27, 27);
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 50px;
-}
+      <div class="my-2">
+        <button id="edit-btn" class="btn btn-dark">Edit Profile</button>
+      </div>
 
-/* Quizzes & Leaderboard Section */
 
-.quiz-lb-section {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 50px;
-}
+      <div class="text-start mx-auto mt-4" style="max-width: 900px;">
+        <label class="form-label fw-semibold">Bio</label>
+        <textarea id="bio-input" class="form-control" rows="4" placeholder="Tell us a bit about yourself..." disabled style="background-color: #f8f9fa;"></textarea>
+        <button id="save-btn" class="btn btn-dark mt-3" style="display: none;">Save Profile</button>
+      </div>
 
-.quizzes-section,
-.leaderboard-section {
-    margin-top: 20px;
-}
 
-#quizzes-btn {
-    padding: 8px 15px;
-    background: #262626;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#quizzes-btn:hover {
-    background: #2f2f2f;
-}
-
-#leaderboard-btn {
-    padding: 8px 15px;
-    background: #262626;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: default;
-}
-</style>
-
-    <div class="containerprofile">
-        <!-- Profile Picture Placeholder -->
-        <div class="profile-pic">
-            <img id="profile-icon">
-            <input type="file" id="file-input" accept="image/*" style="display: none;">
-            <button id="upload-btn">Upload</button>
+      <div class="mt-5">
+        <h4 class="fw-semibold text-start mb-3 text-center" id="your-stats">Your Stats</h4>
+        <div class="row g-4 justify-content-center">
+          <div class="col-md-3 col-sm-6">
+            <div class="card text-center shadow-sm py-3">
+              <h6 class="text-muted mb-1">Quizzes Completed</h6>
+              <span id="quiz-count" class="fw-bold fs-4">--</span>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="card text-center shadow-sm py-3">
+              <h6 class="text-muted mb-1">Highest Score</h6>
+              <span id="highest-score" class="fw-bold fs-4">--</span>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="card text-center shadow-sm py-3">
+              <h6 class="text-muted mb-1">Time Trial Best</h6>
+              <span id="time-trial" class="fw-bold fs-5">--</span>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="card text-center shadow-sm py-3">
+              <h6 class="text-muted mb-1">Leaderboard Rank</h6>
+              <span id="rank" class="fw-bold fs-5">--</span>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Bio Textbox -->
-        <div class="bio-section">
-            <label for="bio">Bio</label>
-            <textarea id="bio" maxlength="300" placeholder="Write your bio here..."></textarea>
-            <button id="save-btn">Save Profile</button>
-        </div>
-
-        <div class="quiz-lb-section">
-
-        <!-- Quizzes Completed Button -->
-        <div class="quizzes-section">
-            <a href="{% url 'quizApp:quiz-home' %}">
-                <button id="quizzes-btn">Quizzes Completed: </button>
-            </a>
-        </div>
-
-        <!-- Leaderboard Placement -->
-        <div class="leaderboard-section">
-            <button id="leaderboard-btn">Leaderboard Rank: </button>
-        </div>
-        </div>
     </div>
+  </div>
+</div>
 
-    <script>
-        // Save the profile picture locally
-    document.getElementById("upload-btn").addEventListener("click", function() {
-        document.getElementById("file-input").click();
+
+<script>
+  const profilePicture = document.getElementById("profile-picture");
+  const profileUpload = document.getElementById("profile-upload");
+  const bioInput = document.getElementById("bio-input");
+  const editBtn = document.getElementById("edit-btn");
+  const saveBtn = document.getElementById("save-btn");
+  const removeBtn = document.getElementById("remove-picture");
+  const removeBtnContainer = document.getElementById("remove-btn-container");
+
+  const usernameDisplay = document.getElementById("username-display");
+  const quizCount = document.getElementById("quiz-count");
+  const highestScore = document.getElementById("highest-score");
+  const timeTrial = document.getElementById("time-trial");
+  const rank = document.getElementById("rank");
+
+
+  fetch("/users/profile-data/")
+    .then(response => response.json())
+    .then(data => {
+      if (data.bio) {
+        bioInput.value = data.bio;
+      }
+      if (data.profile_picture) {
+        profilePicture.src = data.profile_picture;
+        removeBtnContainer.style.display = "block";
+      } else {
+        profilePicture.src = "https://www.gravatar.com/avatar/?d=mp&f=y";
+        removeBtnContainer.style.display = "none";
+      }
+      if (data.username) {
+        usernameDisplay.innerText = data.username;
+      }
+      if (data.quiz_count !== undefined) {
+        quizCount.innerText = data.quiz_count;
+      }
+      if (data.highest_score !== undefined) {
+        highestScore.innerText = data.highest_score;
+      }
+      if (data.time_trial) {
+        timeTrial.innerText = `${data.time_trial} correct`;
+      } else {
+        timeTrial.innerText = "--";
+      }
+      if (data.rank !== null && data.rank !== undefined) {
+        rank.innerText = `#${data.rank}`;
+      } else {
+        rank.innerText = "--";
+      }
     });
 
-    document.getElementById("file-input").addEventListener("change", function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById("profile-icon").src = e.target.result;
-                localStorage.setItem("profileImage", e.target.result); // Save to Local Storage
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+  editBtn.addEventListener("click", () => {
+    bioInput.disabled = false;
+    saveBtn.style.display = "inline-block";
+  });
 
-    // Save the bio
-    document.getElementById("save-btn").addEventListener("click", function() {
-        const bioText = document.getElementById("bio").value;
-        localStorage.setItem("bioText", bioText);
-        alert("Profile saved!");
-    });
+  saveBtn.addEventListener("click", () => {
+    const formData = new FormData();
+    formData.append("bio", bioInput.value);
+    if (profileUpload.files.length > 0) {
+      formData.append("profile_picture", profileUpload.files[0]);
+    }
 
-    // On reload, they are still there
-    window.onload = function() {
-        const savedImage = localStorage.getItem("profileImage");
-        const savedBio = localStorage.getItem("bioText");
-        if (savedImage) {
-            document.getElementById("profile-icon").src = savedImage;
-        }
-        if (savedBio) {
-            document.getElementById("bio").value = savedBio;
-        }
-    };
-    </script>    
+    fetch("/users/profile-data/", {
+      method: "POST",
+      body: formData,
+      headers: { "X-CSRFToken": "{{ csrf_token }}" }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Error updating profile");
+      location.reload();
+    })
+    .catch(error => alert(error));
+  });
 
+  profileUpload.addEventListener("change", () => {
+    const file = profileUpload.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        profilePicture.src = reader.result;
+        removeBtnContainer.style.display = "block";
+        saveBtn.style.display = "inline-block";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  removeBtn.addEventListener("click", () => {
+    fetch("/users/profile-data/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}"
+      },
+      body: JSON.stringify({ remove_picture: true })
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Error removing picture");
+      location.reload();
+    })
+    .catch(error => alert(error));
+  });
+</script>
 {% endblock %}

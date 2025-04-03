@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register_user, login_user, logout_user, update_email
+from .views import register_user, login_user, logout_user, update_email, profile_page, profile_data
 from django.shortcuts import render
 
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path("logout/", logout_user, name="logout-user"),
     path("login-page/", lambda request: render(request, "userApp/login.html"), name="login-page"),
     path("register-page/", lambda request: render(request, "userApp/register.html"), name="register-page"),
-    path("profile-page/", lambda request: render(request, "userApp/profile.html"), name="profile-page"),
+    path("profile-page/", profile_page, name="profile-page"),
+    path("profile-data/", profile_data, name="profile-data"),
 ]

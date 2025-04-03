@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 import re
 import logging
+import base64
 
 myLogger = logging.getLogger(__name__)
 
@@ -191,4 +192,97 @@ def logout_user(request):
         request.session.pop("user_id", None)
         request.session.pop("username", None)
         return redirect("home")
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+def profile_page(request):
+    return render(request, "userApp/profile.html")
+
+
+@csrf_exempt
+def profile_data(request):
+    user_id = request.session.get("user_id")
+    username = request.session.get("username")
+
+    if not user_id:
+        return JsonResponse({"error": "User not logged in"}, status=401)
+
+    if request.method == "GET":
+        try:
+
+            user_result = supabase.table("users").select("bio, profile_picture").eq("user_id", user_id).execute()
+            if not user_result.data:
+                return JsonResponse({"error": "User not found"}, status=404)
+            user_data = user_result.data[0]
+
+            # ths the Quiz stats ---------------------
+            score_data = supabase.table("scores")\
+                .select("quiz_id, score")\
+                .eq("user_id", user_id)\
+                .execute()
+
+            quizzes_completed = len({entry["quiz_id"] for entry in score_data.data})
+            highest_score = max((entry["score"] for entry in score_data.data), default=0)
+
+
+            leaderboard_data = supabase.table("leaderboard")\
+                .select("user_id, correct_answers")\
+                .order("correct_answers", desc=True)\
+                .execute()
+
+            user_rank = None
+            time_trial_best = None
+            for idx, entry in enumerate(leaderboard_data.data):
+                if entry["user_id"] == user_id:
+                    user_rank = idx + 1
+                    time_trial_best = entry["correct_answers"]
+                    break
+
+            return JsonResponse({
+                "bio": user_data.get("bio"),
+                "profile_picture": user_data.get("profile_picture"),
+                "username": username,
+                "quiz_count": quizzes_completed,
+                "highest_score": highest_score,
+                "rank": user_rank,
+                "time_trial": time_trial_best
+            })
+
+        except Exception as e:
+            myLogger.error("Error fetching profile data", exc_info=True)
+            return JsonResponse({"error": "An unexpected error occurred"}, status=500)
+
+    elif request.method == "POST":
+        try:
+            if request.content_type.startswith("multipart/form-data"):
+                bio = request.POST.get("bio", "")
+                image_file = request.FILES.get("profile_picture")
+                base64_image = None
+
+                if image_file:                    
+                    base64_image = "data:" + image_file.content_type + ";base64," + base64.b64encode(image_file.read()).decode("utf-8")
+
+                update_data = {"bio": bio}
+                if base64_image:
+                    update_data["profile_picture"] = base64_image
+
+                supabase.table("users").update(update_data).eq("user_id", user_id).execute()
+                return JsonResponse({"message": "Profile updated"})
+
+            else:
+                data = json.loads(request.body)
+                bio = data.get("bio", "")
+                remove_picture = data.get("remove_picture", False)
+
+                update_data = {"bio": bio}
+                if remove_picture:
+                    update_data["profile_picture"] = None
+
+                supabase.table("users").update(update_data).eq("user_id", user_id).execute()
+                return JsonResponse({"message": "Profile updated"})
+
+        except Exception as e:
+            myLogger.error("Error updating profile", exc_info=True)
+            return JsonResponse({"error": "An unexpected error occurred"}, status=500)
+
     return JsonResponse({"error": "Invalid request method"}, status=405)

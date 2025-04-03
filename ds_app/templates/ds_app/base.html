@@ -82,12 +82,12 @@
                 <a class="nav-link text-white" href="{% url 'quizApp:quiz-home' %}">Quiz</a>
                 <a class="nav-link text-white" href="{% url 'timeTrialApp:time-trial-home' %}">Time Trial</a>
                 <a class="nav-link text-white" href="{% url 'leaderboardApp:leaderboard-home' %}">Leaderboard</a>
-                <a class="nav-link text-white" href="{% url 'userApp:profile-page' %}">Profile</a>
             </div>
+            
             <div class="nav-right">
                 {% if request.session.user_id %}
                 <div class="d-flex align-items-center">
-                    <a class="nav-link text-white me-3" href="{% url 'home' %}">Profile</a>
+                    <a class="nav-link text-white me-3" href="{% url 'userApp:profile-page' %}">Profile</a>
                     <form id="logoutForm" action="{% url 'userApp:logout-user' %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-link nav-link text-white">Logout</button>
