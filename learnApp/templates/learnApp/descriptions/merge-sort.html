@@ -1,192 +1,255 @@
-<h2>What is Merge Sort?</h2>
-
-<!-- AC01312025 -- This section is the actual overview of the algorithm -->
-<p style="text-indent: 30px;">
-    Merge Sort is a highly efficient algorithm that splits an array into smaller subarrays by halving at each step, sorting them individually, and then merging them back together in order. 
+<div class="container py-4" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.05rem;">
+<!---------------------------------------------------------Introduction Start-------------------------------------------------------------------------------------------------------->
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <h2 class="card-title text-center">Introduction</h2>
+    <p class="text-indent">
+      Merge Sort is a highly efficient algorithm that splits an array into smaller subarrays by halving at each step, sorting them individually, and then merging them back together in order. 
     Unlike simpler sorting methods like Bubble Sort or Selection Sort, which repeatedly compare and swap elements, Merge Sort systematically breaks the problem down into smaller parts, making it more efficient for larger datasets.
-</p>
-
-<h2>Divide and Conquer</h2><br>
-
-<h3>3 main steps:</h3>
-<b>Divide</b>: Recursively split the array into smaller subarrays until each subarray contains a single element.<br>
-<b>Conquer</b>: Merge these subarrays back together while sorting them during the merging process.<br>
-<b>Combine</b>: Continue merging until the entire array is sorted.<br><br>
-
-<h3>Step 1: Divide (Breaking the Problem into Subproblems)</h3>
-The array is repeatedly divided into two halves until each subarray contains only one element (which is inherently sorted).<br>
-This step is done recursively.<br>
-If the array has an odd number of elements, one half will contain one more element than the other.<br><br>
-
-<h3>Step 2: Conquer (Sorting and Merging)</h3>
-Now that we have small sorted subarrays (single elements), we merge them back together in sorted order.<br><br>
-
-<h3>Step 3: Combine (Final Sorted Array)</h3>
-Continue merging until the entire array is sorted.<br><br>
-
-<h3>Why Use Divide and Conquer?</h3>
-<b>Efficient Sorting:</b> Merge Sort guarantees O(nlogn) performance in all cases.<br>
-<b>Stable Sorting:</b> It preserves the order of duplicate elements.<br>
-<b>Good for Linked Lists:</b> Since Merge Sort doesn't require random access, it works better than Quick Sort for linked lists.<br><br>
-
-<!-- AC0131 -- This might be changed for animations or for including multiple 'step' images
--->
-<h2>Example 1 (even amount of elements)</h2>
-<div class="text-center" style="max-width: 250px; display: flex; gap: 70px;">
-    <img src="/static/learnApp/images/mergesort02.png" alt="Merge Sort 2 Example" class="img-fluid my-3">
-</div><br>
-
-<h2>Divide the Array</h2><br>
-
-<h3>First Split</h3>
-<b>Divide into two halves:</b><br>
-Left half: [8, 3, 2, 9]<br>
-Right half: [7, 1, 5, 4]<br><br>
-
-<h3>Second Split</h3>
-<b>Split each half further:</b><br>
-Left half [8, 3, 2, 9] → Split into [8, 3] and [2, 9]<br>
-Right half [7, 1, 5, 4] → Split into [7, 1] and [5, 4]<br><br>
-
-<h3>Third Split</h3>
-<b>Split further until each element is separate:</b><br>
-[8, 3] → Split into [8] and [3]<br>
-[2, 9] → Split into [2] and [9]<br>
-[7, 1] → Split into [7] and [1]<br>
-[5, 4] → Split into [5] and [4]<br><br>
-<b>Now, we have reached individual elements:</b><br>
-[8] [3] [2] [9] [7] [1] [5] [4]<br><br>
-
-<h2>Merge the Array</h2><br>
-
-<h3>First Merging Step (Merging Pairs)</h3><br>
-Merge [8] and [3] → [3, 8] (since 3 < 8)<br>
-Merge [2] and [9] → [2, 9] (since 2 < 9)<br>
-Merge [7] and [1] → [1, 7] (since 1 < 7)<br>
-Merge [5] and [4] → [4, 5] (since 4 < 5)<br>
-<b>Now, we have:</b>
-[3, 8] [2, 9] [1, 7] [4, 5]<br><br>
-
-<h3>Second Merging Step</h3><br>
-<b>Now, merge these sorted pairs:</b><br>
-
-- Merge [3, 8] and [2, 9]:<br>
-
-Compare 3 and 2 → 2 goes first.<br>
-Compare 3 and 9 → 3 goes next.<br>
-Compare 8 and 9 → 8 goes next.<br>
-Only 9 is left, so it goes at the end.<br>
-<b>Result: [2, 3, 8, 9]</b><br><br>
-
-- Merge [1, 7] and [4, 5]:<br>
-
-Compare 1 and 4 → 1 goes first.<br>
-Compare 7 and 4 → 4 goes next.<br>
-Compare 7 and 5 → 5 goes next.<br>
-Only 7 is left, so it goes at the end.<br>
-<b>Result: [1, 4, 5, 7]</b><br><br>
-
-<b>Now, we have:</b>
-[2, 3, 8, 9] [1, 4, 5, 7]<br><br>
-
-<h3>Final Merging Step</h3>
-<b>Now, merge [2, 3, 8, 9] and [1, 4, 5, 7]:</b><br>
-
-Compare 2 and 1 → 1 goes first.<br>
-Compare 2 and 4 → 2 goes next.<br>
-Compare 3 and 4 → 3 goes next.<br>
-Compare 8 and 4 → 4 goes next.<br>
-Compare 8 and 5 → 5 goes next.<br>
-Compare 8 and 7 → 7 goes next.<br>
-Compare 8 and 9 → 8 goes next.<br>
-Only 9 is left, so it goes at the end.<br><br>
-
-<h3>Final Sorted Array:</h3>
-[1, 2, 3, 4, 5, 7, 8, 9]<br><br><br>
-
-
-<h2>Example 2 (odd amount of elements)</h2>
-<div class="text-center" style="max-width: 250px; display: flex; gap: 70px;">
-    <img src="/static/learnApp/images/mergesort01.png" alt="Merge Sort 1 Example" class="img-fluid my-3">
-</div><br>
-
-<h2>Divide the Array</h2><br>
-
-<h3>First Split</h3>
-<b>Divide into two halves:</b><br>
-Left half: [12, 8]<br>
-Right half: [9, 3, 11]<br><br>
-
-<h3>Second Split</h3>
-<b>Split each half further:</b><br>
-[12, 8] → Split into [12] and [8]<br>
-[9, 3, 11] → Split into [9] and [3, 11]<br>
-[3, 11] → Split into [3] and [11]<br><br>
-
-<b>Now, we have reached individual elements:</b><br>
-[12] [8] [9] [3] [11]<br><br>
-
-<h2>Merge the Array</h2><br>
-
-<h3>First Merging Step (Merging Pairs)</h3><br>
-Merge [12] and [8] → [8, 12] (since 8 < 12)<br>
-Merge [3] and [11] → [3, 11] (since 3 < 11)<br>
-<b>Now, we have:</b>
-[8, 12] [9] [3, 11]<br><br>
-
-<h3>Second Merging Step</h3><br>
-<b>Merge [9] and [3, 11]:</b><br>
-
-Compare 9 and 3 → 3 goes first.<br>
-Compare 9 and 11 → 9 goes next.<br>
-Compare 8 and 9 → 8 goes next.<br>
-Only 11 is left, so it goes at the end.<br>
-<b>Result: [3, 9, 11]</b><br><br>
-
-<b>Now, we have:</b>
-[8, 12] [3, 9, 11]<br><br>
-
-<h3>Final Merging Step</h3>
-<b>Now, merge [8, 12] and [3, 9, 11]:</b><br>
-
-Compare 8 and 3 → 3 goes first.<br>
-Compare 8 and 9 → 8 goes next.<br>
-Compare 12 and 9 → 9 goes next.<br>
-Compare 12 and 11 → 11 goes next.<br>
-Only 12 is left, so it goes at the end.<br><br>
-
-<h3>Final Sorted Array:</h3>
-[3, 8, 9, 11, 12]<br><br><br>
-
-
-<!-- AC01312025 -- Each algorithm should talk about time complexity-->
-<div class="text-center">
-    <h3>Time Complexity:</h3>
-    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
-        <li><strong>Best case:</strong> O(nlogn)</li>
-        <li><strong>Worst case:</strong> O(nlogn)</li>
-        <li><strong>Average case:</strong> O(nlogn)</li>
-    </ul>
+    </p>
+  </div>
 </div>
 
-<div class="text-center">
-    <h3>Space Complexity:</h3>
-    <ul style="list-style-position: inside; text-align: center; display: inline-block;">
-        <li>Since Merge Sort requires extra memory to store temporary subarrays, its space complexity is O(n)</li>
-    </ul>
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <h2 class="card-title text-center">Divide and Conquer</h2>
+    <h4 class="card-title">3 main steps:</h4>
+    <p class="text-indent">
+      <b>Divide</b>: Recursively split the array into smaller subarrays until each subarray contains a single element.<br>
+      <b>Conquer</b>: Merge these subarrays back together while sorting them during the merging process.<br>
+      <b>Combine</b>: Continue merging until the entire array is sorted.<br><br>
+    </p>
+    <h4 class="card-title">Step 1: Divide</h4>
+    <p class="text-indent">
+      The array is repeatedly divided into two halves until each subarray contains only one element (which is inherently sorted).
+      This step is done recursively.
+      If the array has an odd number of elements, one half will contain one more element than the other.
+    </p>
+    <h4 class="card-title">Step 2: Conquer</h4>
+    <p class="text-indent">
+      Now that we have small sorted subarrays (single elements), we merge them back together in sorted order.
+    </p>
+    <h4 class="card-title">Step 3: Combine</h4>
+    <p class="text-indent">
+      Continue merging until the entire array is sorted.
+    </p>
+  </div>
 </div>
 
-<!--AC01312025 -- Along with time complexity notes, an analysis is also require for page completion -->
-<h3>Analysis:</h3>
-<p style="text-indent: 30px;">
-    Merge Sort has a time complexity of <b>O(nlogn)</b> in all cases—best, average, and worst—because of the way it divides and merges elements.
-</p>
-<p style="text-indent: 30px;">
-    <b>Divide Step O(log n):</b> The algorithm recursively splits the array into halves until each subarray contains only 1 element.
-    Since we repeatedly halve the input size, the number of times we can divide an array of size n is log base 2 of n, or <b>O(log n)</b>.
-</p>
-<p style="text-indent: 30px;">
-    <b>Merge Step O(n):</b> Once the array is fully divided, the algorithm begins merging the smaller sorted subarrays back together.
-    Each merge involves comparing elements and placing them in order, which takes <b>O(n)</b> time in total since every element must be considered and merged once at each level.
-    Since there are <b>O(log n)</b> levels of division and each level requires <b>O(n)</b> operations to merge, the total complexity is O(log n) * O(n) = <b>O(nlogn)</b>.
-</p>
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <h2 class="card-title text-center">Why Use Divide and Conquer?</h2>
+    <p class="text-indent">
+      <b>Efficient Sorting:</b> Merge Sort guarantees O(nlogn) performance in all cases.<br>
+      <b>Stable Sorting:</b> It preserves the order of duplicate elements.<br>
+      <b>Good for Linked Lists:</b> Since Merge Sort doesn't require random access, it works better than Quick Sort for linked lists.<br><br>
+    </p>
+  </div>
+</div>
+</div>
+
+<!--------------------------------Example 1------------------------------->
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+      <h3 class="card-title text-center">Example 1</h3>
+    <p class="text-center small fst-italic text-dark"><u>Even amount of elements</u></p>
+    <div class="text-center mb-4">
+      <img src="/static/learnApp/images/mergesort02.png" alt="Merge Sort 2 Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
+    </div><br>
+      <h2 class="card-title text-center">Divide the Array</h2><br>
+      <div class="container">
+          <div class="row text-center">
+              <div class="col-md-4">
+                  <h5>First Split</h5>
+                  <b>Divide into two halves:</b><br>
+                  Left half: [8, 3, 2, 9]<br>
+                  Right half: [7, 1, 5, 4]<br><br>
+              </div>
+              <div class="col-md-4">
+                  <h5>Second Split</h5>
+                  <b>Split each half further:</b><br>
+                  Left half [8, 3, 2, 9] → Split into [8, 3] and [2, 9]<br>
+                  Right half [7, 1, 5, 4] → Split into [7, 1] and [5, 4]<br><br>
+              </div>
+              <div class="col-md-4">
+                <h5>Third Split</h5>
+                <b>Split further until each element is separate:</b><br>
+                [8, 3] → Split into [8] and [3]<br>
+                [2, 9] → Split into [2] and [9]<br>
+                [7, 1] → Split into [7] and [1]<br>
+                [5, 4] → Split into [5] and [4]<br><br>
+            </div>
+              <div class="col-md-4">
+                  <h5>Now, we have reached individual elements:</h5>
+                  [8] [3] [2] [9] [7] [1] [5] [4]<br><br></p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title text-center">Merge the Array</h2><br>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h5>First Merging Step (Merging Pairs)</h5>
+                    <p>Merge [8] and [3] → [3, 8] (since 3 < 8)</p>
+                    <p>Merge [2] and [9] → [2, 9] (since 2 < 9)</p>
+                    <p>Merge [7] and [1] → [1, 7] (since 1 < 7)</p>
+                    <p>Merge [5] and [4] → [4, 5] (since 4 < 5)</p>
+                    <p><b>Now, we have:</b> [3, 8] [2, 9] [1, 7] [4, 5]</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Second Merging Step</h5>
+                    <p><b>Now, merge these sorted pairs:</b></p>
+                    <p>- Merge [3, 8] and [2, 9]:</p>
+                    <p>Compare 3 and 2 → 2 goes first.</p>
+                    <p>Compare 3 and 9 → 3 goes next.</p>
+                    <p>Compare 8 and 9 → 8 goes next.</p>
+                    <p>Only 9 is left, so it goes at the end.</p>
+                    <p><b>Result: [2, 3, 8, 9]</b></p>
+
+                    <p>- Merge [1, 7] and [4, 5]:</p>
+                    <p>Compare 1 and 4 → 1 goes first.</p>
+                    <p>Compare 7 and 4 → 4 goes next.</p>
+                    <p>Compare 7 and 5 → 5 goes next.</p>
+                    <p>Only 7 is left, so it goes at the end.</p>
+                    <p><b>Result: [1, 4, 5, 7]</b></p>
+                    <p><b>Now, we have: </b>[2, 3, 8, 9] [1, 4, 5, 7]</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Final Merging Step</h5>
+                    <p><b>Merge [2, 3, 8, 9] and [1, 4, 5, 7]:</b></p>
+                    <p>Compare 2 and 4 → 2 goes next.</p>
+                    <p>Compare 3 and 4 → 3 goes next.</p>
+                    <p>Compare 8 and 4 → 4 goes next.</p>
+                    <p>Compare 8 and 5 → 5 goes next.</p>
+                    <p>Compare 8 and 7 → 7 goes next.</p>
+                    <p>Compare 8 and 9 → 8 goes next.</p>
+                    <p>Only 9 is left, so it goes at the end.<br>
+                </div>
+                <p><br><h3>Final Sorted Array:</h3>
+                    <p>[1, 2, 3, 4, 5, 7, 8, 9]</p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------Example 2------------------------------->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h3 class="card-title text-center">Example 2</h3>
+      <p class="text-center small fst-italic text-dark"><u>Odd amount of elements</u></p>
+      <div class="text-center mb-4">
+        <img src="/static/learnApp/images/mergesort01.png" alt="Merge Sort 1 Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
+      </div><br>
+        <h2 class="card-title text-center">Divide the Array</h2><br>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h5>First Split</h5>
+                    <b>Divide into two halves:</b><br>
+                    Left half: [12, 8]<br>
+                    Right half: [9, 3, 11]<br><br>
+                </div>
+                <div class="col-md-4">
+                    <h5>Second Split</h5>
+                    [12, 8] → Split into [12] and [8]<br>
+                    [9, 3, 11] → Split into [9] and [3, 11]<br>
+                    [3, 11] → Split into [3] and [11]<br><br>
+                </div>
+                <div class="col-md-4">
+                    <h5>Now, we have reached individual elements:</h5>
+                        [12] [8] [9] [3] [11]<br><br></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title text-center">Merge the Array</h2><br>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h5>First Merging Step (Merging Pairs)</h5>
+                    <p>Merge [12] and [8] → [8, 12] (since 8 &lt; 12)</p>
+                    <p>Merge [3] and [11] → [3, 11] (since 3 &lt; 11)</p>
+                    <p><b>Now, we have:</b> [8, 12] [9] [3, 11]</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Second Merging Step</h5>
+                    <p><b>Merge [9] and [3, 11]:</b></p>
+                    <p>Compare 9 and 3 → 3 goes first.</p>
+                    <p>Compare 9 and 11 → 9 goes next.</p>
+                    <p>Compare 8 and 9 → 8 goes next.</p>
+                    <p>Only 11 is left, so it goes at the end.</p>
+                    <p><b>Result: [3, 9, 11]</b></p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Final Merging Step</h5>
+                    <p><b>Merge [8, 12] and [3, 9, 11]:</b></p>
+                    <p>Compare 8 and 3 → 3 goes first.</p>
+                    <p>Compare 8 and 9 → 8 goes next.</p>
+                    <p>Compare 12 and 9 → 9 goes next.</p>
+                    <p>Compare 12 and 11 → 11 goes next.</p>
+                    <p>Only 12 is left, so it goes at the end.</p>
+                </div>
+                <p><br><h3>Final Sorted Array:</h3>
+                    <p>[3, 8, 9, 11, 12]</p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------------------------------------------------------Time Complexity Start---------------------------------------------------------------------------------------------------->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title text-center">Runtime</h2>
+      <table class="w-50 mx-auto" style="border-collapse: collapse; border: 2px solid black;">
+        <thead>
+          <tr>
+            <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Case</th>
+            <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Time Complexity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Best</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Average</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">Worst</td>
+            <td style="border: 2px solid black; padding: 8px; text-align: center;">O(nlogn)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-----------------------------------------------------------Time Complexity End---------------------------------------------------------------------------------------------------->
+<!-- Analysis Section -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center">Analysis:</h3>
+      <p class="text-indent">
+        Merge Sort has a time complexity of <b>O(nlogn)</b> in all cases—best, average, and worst—because of the way it divides and merges elements.
+      </p>
+      <p class="text-indent">
+        In the divide step, the algorithm recursively splits the array into halves until each subarray contains only 1 element.
+        Since we repeatedly halve the input size, the number of times we can divide an array of size n is log base 2 of n, or <b>O(log n)</b>.
+      </p>
+      <p class="text-indent">
+        In the merge step, once the array is fully divided, the algorithm begins merging the smaller sorted subarrays back together.
+        Each merge involves comparing elements and placing them in order, which takes <b>O(n)</b> time in total since every element must be considered and merged once at each level.
+        Since there are <b>O(log n)</b> levels of division and each level requires <b>O(n)</b> operations to merge, the total complexity is O(log n) * O(n) = <b>O(nlogn)</b>.
+      </p>
+      <p><b>Space Complexity:</b> Since Merge Sort requires extra memory to store temporary subarrays, its space complexity is O(n).</p>
+    </div>
+  </div>
