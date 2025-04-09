@@ -1,0 +1,207 @@
+<div class="container py-4" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.05rem;">
+
+    <!---------------------------------------------------------Introduction Start-------------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+        <div class="text-center">
+            <img src="/static/learnApp/images/insertionsort_example1.png" alt="Insertion Sort Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center">Introduction</h2>
+            <p class="text-indent">
+                Insertion Sort is a simple and efficient sorting algorithm. It works by building the sorted portion of the array one element at a time, 
+                inserting each new element into its correct position relative to the already sorted elements. This process is similar to how playing cards are sorted in the player's hand, 
+                where each card is "inserted" in its proper position among the previously sorted cards. 
+                While this highlights its simplicity, insertion sort is also a fundamental algorithm that introduces key concepts in sorting and algorithm design.
+            </p>
+            <p class="text-indent">
+                Insertion sort is particularly efficient for small datasets or arrays that are already nearly sorted. 
+                This is because the algorithm minimizes unnecessary comparisons and swaps in such cases, achieving a best-case runtime of O(n). 
+                For nearly sorted arrays, the number of shifts required is significantly reduced, making it faster than many other algorithms. 
+                However, as the size of the dataset grows or the array becomes more disordered, the algorithm's performance degrades due to its nested loop structure. 
+                This quadratic time complexity in the average and worst cases makes insertion sort less suitable for large datasets compared to more advanced algorithms like merge sort or quicksort.
+            </p>
+            <p class="text-indent">
+                Despite its limitations, insertion sort has practical applications and remains an important algorithm in computer science. 
+                It is particularly useful in scenarios where the dataset is small, as its simplicity and low overhead make it efficient for such cases. 
+                Insertion sort is also commonly used in educational settings to introduce fundamental concepts in sorting algorithms, such as comparisons, swaps, and in-place operations. 
+                Furthermore, its stability—preserving the relative order of equal elements—makes it suitable for tasks where maintaining the original order of data is important, 
+                such as sorting records by multiple fields. Its in-place nature, requiring no additional memory beyond the input array, further adds to its utility in memory-constrained environments.
+            </p>
+        </div>
+    </div>
+    <!---------------------------------------------------------Introduction End---------------------------------------------------------------------------------------------------------->
+
+<!---------------------------------------------------------Insertion Sort Start------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+        <div class="text-center">
+            <img src="/static/learnApp/images/insertionsort_example2.png" alt="Insertion Sort Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
+        </div>
+        <div class="card-body">
+            <h3 class="card-title text-center">Insertion Sort Operations</h3>
+            <p class="text-indent">
+                Insertion Sort operates by maintaining a sorted portion of the array and inserting each new element into its correct position. 
+                The algorithm processes one element at a time, comparing it with the elements in the sorted portion and shifting larger elements to the right 
+                to make space for the current element. This process ensures that the sorted portion of the array grows incrementally with each iteration.
+            </p>
+            <p class="text-indent">
+                The key operations involved in insertion sort are:
+            </p>
+            <ul class="ms-4">
+                <li><b>Comparison:</b> Each element is compared with the elements in the sorted portion of the array to find its correct position. 
+                This involves iterating backward through the sorted portion until the correct position is identified.</li>
+                <li><b>Shifting:</b> Larger elements in the sorted portion are shifted one position to the right to make space for the new element. 
+                This operation is repeated until the correct position for the current element is reached.</li>
+                <li><b>Insertion:</b> The current element is inserted into its correct position in the sorted portion. 
+                This completes the processing of the current element, and the algorithm moves on to the next unsorted element.</li>
+            </ul>
+            <p class="text-indent">
+                To better understand these operations, consider the following example:
+            </p>
+            <p class="text-indent">
+                Suppose we are sorting the array <b>[5, 3, 8, 6, 2]</b> using insertion sort. The algorithm starts with the first element (5), which is already sorted. 
+                It then processes the second element (3):
+            </p>
+            <ul class="ms-4">
+                <li><b>Comparison:</b> Compare 3 with 5. Since 3 is smaller, we proceed to the next step.</li>
+                <li><b>Shifting:</b> Shift 5 one position to the right to make space for 3.</li>
+                <li><b>Insertion:</b> Insert 3 into the first position. The array now looks like <b>[3, 5, 8, 6, 2]</b>.</li>
+            </ul>
+            <p class="text-indent">
+                These steps are repeated for each subsequent element in the array until the entire array is sorted. For example, the third element (8) 
+                is already in its correct position, so no shifting is required. However, the fourth element (6) requires shifting 8 to the right before inserting 6 
+                into its correct position. The final sorted array is <b>[2, 3, 5, 6, 8]</b>.
+            </p>
+            <p class="text-indent">
+                Insertion sort is particularly efficient for nearly sorted arrays because the number of comparisons and shifts is minimized. 
+                For example, if the array is already sorted, the algorithm only performs n-1 comparisons and no shifts, resulting in a best-case runtime of O(n). 
+                However, in the worst case, such as when the array is sorted in reverse order, the algorithm performs the maximum number of comparisons and shifts, 
+                leading to a runtime of O(n²).
+            </p>
+        </div>
+    </div>
+    <!---------------------------------------------------------Insertion Sort End--------------------------------------------------------------------------------------------->
+
+    <!---------------------------------------------------------Example Start------------------------------------------------------------------------------------------------------------>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+        <h3 class="card-title text-center">Example</h3>
+        <p class="text-center small fst-italic text-dark"><u>Given this array, sort it using insertion sort:</u></p>
+        <div class="text-center">
+            <img src="/static/learnApp/images/insertionsort_example3.png" alt="Insertion Sort Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
+        </div>
+        <h4 class="text-center mt-4">Step-by-Step of Insertion Sort</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                <th>Step</th>
+                <th>Array State</th>
+                <th>Explanation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>1</td>
+                <td>[5, 2, 4, 6, 1, 3]</td>
+                <td>Start with the first element (5). It is already sorted.</td>
+                </tr>
+                <tr>
+                <td>2</td>
+                <td>[2, 5, 4, 6, 1, 3]</td>
+                <td>Compare 2 with 5. Shift 5 to the right and insert 2 in its correct position.</td>
+                </tr>
+                <tr>
+                <td>3</td>
+                <td>[2, 4, 5, 6, 1, 3]</td>
+                <td>Compare 4 with 5. Shift 5 to the right and insert 4 in its correct position.</td>
+                </tr>
+                <tr>
+                <td>4</td>
+                <td>[2, 4, 5, 6, 1, 3]</td>
+                <td>Compare 6 with 5. No shifting is needed as 6 is already in the correct position.</td>
+                </tr>
+                <tr>
+                <td>5</td>
+                <td>[1, 2, 4, 5, 6, 3]</td>
+                <td>Compare 1 with all elements. Shift 6, 5, 4, and 2 to the right and insert 1 at the beginning.</td>
+                </tr>
+                <tr>
+                <td>6</td>
+                <td>[1, 2, 3, 4, 5, 6]</td>
+                <td>Compare 3 with 6, 5, and 4. Shift 6, 5, and 4 to the right and insert 3 in its correct position.</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>  
+        </div>
+    </div>
+    <!---------------------------------------------------------Example End-------------------------------------------------------------------------------------------------------------->
+
+
+    <!---------------------------------------------------------Time Complexity Start---------------------------------------------------------------------------------------------------->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title text-center">Time Complexity</h3>
+          <table class="w-50 mx-auto" style="border-collapse: collapse; border: 2px solid black;">
+            <thead>
+              <tr>
+                <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Case</th>
+                <th style="border: 2px solid black; padding: 8px; text-align: center;" class="fw-semibold">Time Complexity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">Best</td>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">O(n)</td>
+              </tr>
+              <tr>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">Average</td>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">O(n²)</td>
+              </tr>
+              <tr>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">Worst</td>
+                <td style="border: 2px solid black; padding: 8px; text-align: center;">O(n²)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------Time Complexity End------------------------------------------------------------------------------------------------------>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title text-center">Analysis</h3>
+          <p class="text-indent">
+            Like bubble sort, insertion sort has a runtime of O(n²) in the average and worst cases, but unlike bubble sort, insertion sort is more efficient for small datasets or nearly sorted arrays. 
+            Its best-case runtime is O(n), which occurs when the array is already sorted, as no shifting is required. This makes insertion sort a practical choice for small-scale applications 
+            or as a teaching tool for understanding sorting algorithms.
+          </p>
+          
+          <p class="text-indent">
+            Insertion sort achieves its O(n²) runtime due to its nested loop structure. For each element in the array, the algorithm compares it with all previous elements in the sorted portion 
+            and shifts larger elements to the right to make space for the current element. In the worst case, such as when the array is sorted in reverse order, the algorithm performs the maximum 
+            number of comparisons and shifts, resulting in quadratic growth in runtime. However, in the best case, where the array is already sorted, the algorithm only performs n-1 comparisons, 
+            making it significantly faster.
+          </p>
+          
+          <p class="text-indent">
+            One of the key strengths of insertion sort is its stability, meaning it preserves the relative order of equal elements. This property is particularly useful in scenarios where sorting 
+            by multiple criteria is required, such as sorting a list of records by one field while maintaining the order of another field. Additionally, insertion sort is an in-place algorithm, 
+            requiring no additional memory beyond the input array, which gives it a space complexity of O(1). This makes it suitable for memory-constrained environments where minimizing space usage is critical.
+          </p>
+          
+          <p class="text-indent">
+            Unlike more advanced algorithms like merge sort or quicksort, insertion sort's performance depends heavily on the input. While it excels with small or nearly sorted datasets, 
+            its inefficiency for large or disordered datasets limits its practical use. Despite this, its simplicity and predictable behavior make it an excellent choice for educational purposes 
+            and for scenarios where the dataset size is small and memory usage is a concern.
+          </p>
+          
+          <p><b>Space Complexity:</b> Insertion sort is an in-place algorithm, meaning it doesn't require any extra memory beyond the input array. 
+          This gives it a space complexity of O(1), making it efficient in terms of memory usage compared to algorithms like merge sort, which require additional space for temporary arrays.
+          Insertion sort is an in-place sorting algorithm, meaning it rearranges elements within the input array itself without requiring additional storage. 
+    This is achieved by using a small, constant amount of extra memory for temporary variables during the shifting and insertion operations.
+        </p>   
+        </div>
+    </div>
+</div>
