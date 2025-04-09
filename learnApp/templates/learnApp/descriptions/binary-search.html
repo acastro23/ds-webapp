@@ -35,7 +35,7 @@
             <p class="text-indent">
                 At the core of binary search is the concept of maintaining a search interval, defined by two pointers: <b>low</b> and <b>high</b>. These pointers represent the boundaries of the 
                 current search range. The algorithm calculates the middle index, <b>mid</b>, and compares the element at this index with the target value. Depending on the result of the comparison, 
-                the search interval is adjusted by moving either the <b>low</b> or <b>high</b> pointer, effectively discarding the half of the array that cannot contain the target.
+                the search interval is adjusted by moving either the low or high pointer, effectively discarding the half of the array that cannot contain the target.
             </p>
             <p class="text-indent">
                 This process of halving the search space continues iteratively until one of two conditions is met: the target value is found, or the search interval becomes empty, indicating that 
@@ -58,32 +58,32 @@
             <h3 class="card-title text-center">Iterative Binary Search</h3>
             <p class="text-indent">
                 The iterative implementation of binary search uses a loop to repeatedly narrow down the search interval until the target is found or the interval becomes empty. 
-                By systematically updating the <b>low</b>, <b>high</b>, and <b>mid</b> pointers (introduced earlier), the algorithm eliminates half of the 
+                By systematically updating the low, high, and mid pointers (introduced earlier), the algorithm eliminates half of the 
                 remaining elements in each iteration. This approach is often preferred for its simplicity and efficiency, as it avoids the overhead of recursive function calls.
             </p>
             <p class="text-indent">
-                One of the key advantages of the iterative approach is its <b>space efficiency</b>. Unlike the recursive implementation, which requires additional memory for the 
+                One of the key advantages of the iterative approach is its space efficiency. Unlike the recursive implementation, which requires additional memory for the 
                 call stack, the iterative version operates entirely within a single function, resulting in a space complexity of O(1). This makes it particularly suitable for 
                 memory-constrained environments or scenarios where the input size is very large.
             </p>
             <p class="text-indent">
-                The iterative process begins by initializing the <b>low</b> and <b>high</b> pointers to the first and last indices of the array, respectively. The algorithm then 
-                enters a loop that continues as long as <b>low</b> is less than or equal to <b>high</b>. Within each iteration, the middle index, <b>mid</b>, is calculated, and 
+                The iterative process begins by initializing the low and high pointers to the first and last indices of the array, respectively. The algorithm then 
+                enters a loop that continues as long as low is less than or equal to high. Within each iteration, the middle index, mid, is calculated, and 
                 the element at this index is compared with the target value. Depending on the result of the comparison:
             </p>
             <ul class="ms-4">
                 <li><b>If the middle element equals the target:</b> The search is complete, and the index of the middle element is returned.</li>
-                <li><b>If the middle element is greater than the target:</b> The search interval is updated to the left half by setting <b>high = mid - 1</b>.</li>
-                <li><b>If the middle element is less than the target:</b> The search interval is updated to the right half by setting <b>low = mid + 1</b>.</li>
+                <li><b>If the middle element is greater than the target:</b> The search interval is updated to the left half by setting high = mid - 1.</li>
+                <li><b>If the middle element is less than the target:</b> The search interval is updated to the right half by setting low = mid + 1.</li>
             </ul>
             <p class="text-indent">
-                The loop continues until the target is found or the <b>low</b> pointer exceeds the <b>high</b> pointer, indicating that the target is not present in the array. 
+                The loop continues until the target is found or the low pointer exceeds the high pointer, indicating that the target is not present in the array. 
                 At this point, the algorithm typically returns a special value (e.g., -1) to signal that the search was unsuccessful.
             </p>
             <p class="text-indent">
-                While the iterative implementation is straightforward, it requires careful attention to detail, particularly when calculating the <b>mid</b> index. A common 
-                pitfall is the potential for integer overflow when computing <b>mid = (low + high) / 2</b> in languages where integers have fixed sizes. To avoid this, a safer 
-                formula such as <b>mid = low + (high - low) / 2</b> is often used. 
+                While the iterative implementation is straightforward, it requires careful attention to detail, particularly when calculating the mid index. A common 
+                pitfall is the potential for integer overflow when computing mid = (low + high) / 2 in languages where integers have fixed sizes. To avoid this, a safer 
+                formula such as mid = low + (high - low) / 2 is often used. 
             </p>
             <p class="text-indent">
                 The following pseudocode demonstrates the iterative implementation of binary search:
@@ -102,17 +102,17 @@
                 This approach mirrors the logical structure of binary search, breaking the problem into smaller subproblems until the target is found or the search interval becomes empty.
             </p>
             <p class="text-indent">
-                The search interval is defined by two pointers: <b>low</b> and <b>high</b>. These pointers, along with the middle index 
-                <b>mid</b>, are passed as arguments to each recursive call. Depending on the comparison between the target value and the element at <b>mid</b>, the algorithm adjusts 
+                The search interval is defined by two pointers: low and high. These pointers, along with the middle index 
+                mid, are passed as arguments to each recursive call. Depending on the comparison between the target value and the element at mid, the algorithm adjusts 
                 the search interval by recursively searching either the left or right half of the array:
             </p>
             <ul class="ms-4">
                 <li><b>If the middle element equals the target:</b> The search is complete, and the index of the middle element is returned.</li>
-                <li><b>If the middle element is greater than the target:</b> The algorithm recursively searches the left half by calling itself with <b>high = mid - 1</b>.</li>
-                <li><b>If the middle element is less than the target:</b> The algorithm recursively searches the right half by calling itself with <b>low = mid + 1</b>.</li>
+                <li><b>If the middle element is greater than the target:</b> The algorithm recursively searches the left half by calling itself with high = mid - 1.</li>
+                <li><b>If the middle element is less than the target:</b> The algorithm recursively searches the right half by calling itself with low = mid + 1.</li>
             </ul>
             <p class="text-indent">
-                The recursion continues until one of two conditions is met: the target value is found, or the <b>low</b> pointer exceeds the <b>high</b> pointer, indicating that the 
+                The recursion continues until one of two conditions is met: the target value is found, or the low pointer exceeds the high pointer, indicating that the 
                 target is not present in the array. In the latter case, the algorithm typically returns a special value (e.g., -1) to signal that the search was unsuccessful.
             </p>
             <p class="text-indent">
@@ -232,5 +232,10 @@
                 In contrast, the recursive implementation incurs additional memory overhead due to the recursive call stack, resulting in a space complexity of O(log n). 
                 While this difference is negligible for small datasets, it can become significant for very large arrays, especially in environments with limited stack size.
             </p>
+            <p><b>Space Complexity:</b> Binary search is highly efficient in terms of space complexity. The iterative implementation operates in-place, requiring only a constant amount of extra memory 
+                for variables like low, high, and mid. This results in a space complexity of O(1), making it ideal for memory-constrained environments. 
+                In contrast, the recursive implementation incurs additional memory overhead due to the recursive call stack, resulting in a space complexity of O(log n). 
+                While this difference is negligible for small datasets, it can become significant for very large arrays, especially in environments with limited stack size.
+              </p>   
         </div>
     </div>
