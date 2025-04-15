@@ -2,6 +2,10 @@ from django.test import SimpleTestCase
 from userApp.views import val_email, val_user, val_password
 
 
+""" 
+AC04152025 -- These test cases were for an interview, ignore them
+"""
+
 class TestValEmail(SimpleTestCase):
     def test_valid_email(self):
         self.assertIsNone(val_email("alex@gmail.com"))
