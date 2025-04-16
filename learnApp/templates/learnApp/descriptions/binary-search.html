@@ -133,40 +133,47 @@
     <!---------------------------------------------------------Recursive End---------------------------------------------------------------------------------------------->
 
     <!---------------------------------------------------------Example Start------------------------------------------------------------------------------------------------------------>
-    <!-- <div class="card mb-4 shadow-sm">
+    <div class="card mb-4 shadow-sm">
         <div class="card-body">
-          <h3 class="card-title text-center">Example</h3>
-          <p class="text-center small fst-italic text-dark"><u>Given this sorted array, find the target value (X) using binary search:</u></p>
-          <div class="text-center">
-            <img src="/static/learnApp/images/binary_search_example.png" alt="Binary Search Example" class="img-fluid border-black" style="max-width: 300px; height: auto;">
-          </div>
-          <h4 class="text-center mt-4">Step-by-Step of Binary Search</h4>
-          <div class="table-responsive">
-            <table class="table table-bordered text-center">
-              <thead class="table-light">
-                <tr>
-                  <th>Step</th>
-                  <th>Low</th>
-                  <th>High</th>
-                  <th>Mid</th>
-                  <th>Array State</th>
-                  <th>Explanation</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>0</td>
-                  <td>8</td>
-                  <td>4</td>
-                  <td>[1, 3, 5, 6, <b>7</b>, 8, 9, 10, 12]</td>
-                  <td>Compare 7 with the middle element (7). Target found at index 4.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <h3 class="card-title text-center">Example</h3>
+            <p class="text-center small fst-italic text-dark">
+                <u>Given this sorted array, find the target value (6) using binary search:</u>
+            </p>
+            <div class="text-center">
+                <img src="/static/learnApp/images/binary_search_array.png" alt="Binary Search array" class="img-fluid border-black" style="max-width: 500px; height: auto;">            </div>
+            <h4 class="text-center mt-4">Step-by-Step of Binary Search</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Step</th>
+                            <th>Low</th>
+                            <th>High</th>
+                            <th>Mid</th>
+                            <th>Array State</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Step 1 -->
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>6</td>
+                            <td>3</td>
+                            <td>[1, 3, 5, <b>6</b>, 7, 9, 11]</td>
+                            <td>Compare 6 with the middle element (6). Target found at index 3.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-indent mt-4">
+                The example above demonstrates how binary search is applied to a sorted array to efficiently locate a target value. In this case, we are given an array, A, with 7 elements: [1, 3, 5, 6, 7, 9, 11], and the target value is 6.
+                The algorithm begins by initializing two pointers: Low at index 0 (value 1) and High at index 6 (value 11), which represent the boundaries of the current search range. The Mid index is calculated as (Low + High) // 2, which gives index 3. 
+                The element at index 3 is 6, which matches the target value. Since the target is found on the first comparison, the search is complete, and the algorithm returns the index 3 as the result.
+            </p>
         </div>
-    </div> -->
+    </div>
     <!---------------------------------------------------------Example End-------------------------------------------------------------------------------------------------------------->
 
     <!---------------------------------------------------------Time Complexity Start---------------------------------------------------------------------------------------------------->
