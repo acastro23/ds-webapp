@@ -3,16 +3,45 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; min-height: 80vh;">
-        <h1>Welcome to the StrucTutor</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint deserunt laborum a itaque corrupti perferendis vitae. Placeat, id praesentium. Molestias natus pariatur error repellat a tempore maxime nisi eligendi aliquid?Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut veritatis soluta vel dolorum impedit nemo id voluptatem illo sint nam perferendis doloremque vero eos voluptatum, ex inventore placeat quia consequatur?</p>
-        {% if request.session.user_id %}
-            <p>Welcome back, <b>{{ request.session.username }}</b>!</p>          
-        {% else %}
-            <div class="mt-4">
-                <a href="{% url 'userApp:login-page' %}" class="btn btn-dark me-3">Login</a>
-                <a href="{% url 'userApp:register-page' %}" class="btn btn-secondary">Register</a>
+<div class="container mt-5 text-center">
+    <h1 class="fw-bold">Welcome to StrucTutor!</h1>
+    <p class="lead">
+        StrucTutor is your ultimate companion for mastering sorting algorithms. Whether you're a student, developer, or just curious about how data is organized, 
+        our app provides an interactive and engaging way to learn, practice, and test your knowledge of sorting algorithms.
+    </p>
+
+    <div class="row justify-content-center g-5 mt-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100" style="min-height: 300px;">
+                <div class="card-body text-center p-4">
+                    <h5 class="fw-semibold">Learn</h5>
+                    <p class="text-muted">Dive into detailed explanations and visualizations of popular sorting algorithms to build a strong foundation.</p>
+                </div>
             </div>
-        {% endif %}
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100" style="min-height: 300px;">
+                <div class="card-body text-center p-4">
+                    <h5 class="fw-semibold">Quiz</h5>
+                    <p class="text-muted">Test your understanding with interactive quizzes designed to challenge your knowledge and reinforce key concepts.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100" style="min-height: 300px;">
+                <div class="card-body text-center p-4">
+                    <h5 class="fw-semibold">Time Trial</h5>
+                    <p class="text-muted">Practice and review core concepts under time constraints to sharpen your skills and improve your speed.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100" style="min-height: 300px;">
+                <div class="card-body text-center p-4">
+                    <h5 class="fw-semibold">Leaderboard</h5>
+                    <p class="text-muted">The leaderboard showcases the top performers based on quiz scores and completion time. Compete with others and see how you rank!</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
