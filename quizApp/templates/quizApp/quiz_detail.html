@@ -70,7 +70,11 @@
     </div>
 
     <div class="text-center mb-5">
-        <a href="{% url 'quizApp:quiz-start' quiz_id %}" class="btn btn-dark btn-lg px-5">Start Quiz</a>
-    </div>
+        {% if show_resume %}
+            <a href="{% url 'quizApp:quiz-start' quiz_id %}" class="btn btn-warning btn-lg px-5">Resume Quiz</a>
+        {% else %}
+            <a href="{% url 'quizApp:quiz-start' quiz_id %}" class="btn btn-dark btn-lg px-5">Start Quiz</a>
+        {% endif %}
+    </div>    
 </div>
 {% endblock %}

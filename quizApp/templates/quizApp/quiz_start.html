@@ -30,7 +30,6 @@
     }
 </style>
 
-
 <div class="container mt-5 text-center">
     <h1 class="fw-bold">{{ quiz_title }}</h1>
 
@@ -38,7 +37,7 @@
         {% csrf_token %}
 
         {% for question_id, question in questions.items %}
-            <div class="question-container mt-4" id="question_{{ question_id }}" {% if not forloop.first %} style="display: none;" {% endif %}>
+            <div class="question-container mt-4" id="question_{{ forloop.counter0 }}" {% if not forloop.first %} style="display: none;" {% endif %}>
                 <h4 class="mb-4">{{ question.question_text }}</h4>
 
                 <div class="row justify-content-center">
@@ -68,7 +67,10 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    let currentQuestionIndex = 0;
+    const resumeIndex = parseInt("{{ resume_index|default:'0' }}");
+    let currentQuestionIndex = isNaN(resumeIndex) ? 0 : resumeIndex;
+    const quizKey = "quiz_{{ quiz_id }}_answers";
+
     const questions = document.querySelectorAll(".question-container");
     const prevButton = document.getElementById("prev-btn");
     const nextButton = document.getElementById("next-btn");
@@ -84,10 +86,50 @@ document.addEventListener("DOMContentLoaded", function () {
         submitButton.style.display = index === questions.length - 1 ? "inline-block" : "none";
     }
 
+    function saveProgress(index) {
+        fetch("/users/profile-data/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                "quiz_id": "{{ quiz_id }}",
+                "current_question_index": index
+            })
+        });
+    }
+
+    function saveAnswer(questionId, answerId) {
+        const saved = JSON.parse(localStorage.getItem(quizKey)) || {};
+        saved[questionId] = answerId;
+        localStorage.setItem(quizKey, JSON.stringify(saved));
+    }
+
+    function restoreAnswers() {
+        const saved = JSON.parse(localStorage.getItem(quizKey)) || {};
+        for (const [questionId, answerId] of Object.entries(saved)) {
+            const radio = document.querySelector(`input[name="question_${questionId}"][value="${answerId}"]`);
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+    }
+
+    document.querySelectorAll("input[type='radio']").forEach(radio => {
+        radio.addEventListener("change", () => {
+            const name = radio.name; 
+            const questionId = name.split("_")[1];
+            const answerId = radio.value;
+            saveAnswer(questionId, answerId);
+        });
+    });
+
     prevButton.addEventListener("click", function () {
         if (currentQuestionIndex > 0) {
             currentQuestionIndex--;
             showQuestion(currentQuestionIndex);
+            saveProgress(currentQuestionIndex);
         }
     });
 
@@ -95,9 +137,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (currentQuestionIndex < questions.length - 1) {
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);
+            saveProgress(currentQuestionIndex);
         }
     });
 
+    document.getElementById("quizForm").addEventListener("submit", function () {
+        localStorage.removeItem(quizKey);
+    });
+
+    restoreAnswers();
     showQuestion(currentQuestionIndex);
 });
 </script>

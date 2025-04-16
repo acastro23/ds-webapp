@@ -1,0 +1,39 @@
+{% extends "ds_app/base.html" %}
+{% block title %}Time Trial Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1 class="fw-bold">Time Trial Complete</h1>
+
+    <div class="mt-4">
+        <h2 class="fw-bold text-primary">{{ correct_answers }} Correct</h2>
+        <p class="text-muted">You attempted {{ wrong_answers|length|add:correct_answers }} in 2 minutes</p>
+    </div>
+
+    {% if wrong_answers %}
+        <div class="mt-5">
+            <h4 class="fw-semibold text-danger mb-3">Questions You Missed:</h4>
+            <div class="text-start mx-auto" style="max-width: 900px;">
+                {% for item in wrong_answers %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold">{{ item.question_text }}</h5>
+                            <p><span class="text-danger fw-semibold">Your Answer:</span> {{ item.user_answer }}</p>
+                            <p><span class="text-success fw-semibold">Correct Answer:</span> {{ item.correct_answer }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="mt-4 text-success fs-4 fw-bold">
+            You got everything right! Good Job!
+        </div>
+    {% endif %}
+
+    <div class="mt-5">
+        <a href="{% url 'timeTrialApp:time-trial-start' %}" class="btn btn-dark btn-lg me-3">Retake Time Trial</a>
+        <a href="{% url 'leaderboardApp:leaderboard-home' %}" class="btn btn-outline-secondary btn-lg">View Leaderboard</a>
+    </div>
+</div>
+{% endblock %}

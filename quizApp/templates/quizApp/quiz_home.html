@@ -18,11 +18,13 @@
                             </a>
                         </h5>
                         <p class="mt-3">
-                            {% if quiz.score is not None %}
-                                <span class="badge bg-success">Score: {{ quiz.score }}/10</span>
+                            {% if quiz.completed %}
+                                <span class="badge bg-success">✔ Completed</span>
+                            {% elif quiz.score is not None %}
+                                <span class="badge bg-warning text-dark">In Progress</span>
                             {% else %}
                                 <span class="badge bg-secondary">Not Attempted</span>
-                            {% endif %}
+                            {% endif %}                          
                         </p>
                     </div>
                 </div>

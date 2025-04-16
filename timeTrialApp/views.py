@@ -42,29 +42,74 @@ def time_trial_submit(request):
         try:
             completion_time = round(float(request.POST.get("completion_time", "0")))
         except ValueError:
-            return JsonResponse({"error": "Invalid or missing completion time."}, status=400)
+            completion_time = 0
 
         try:
-            correct_answers = int(request.POST.get("correct_answers", "0"))
+            submitted_answers = {
+                key.replace("question_", ""): int(value)
+                for key, value in request.POST.items()
+                if key.startswith("question_")
+            }
         except ValueError:
-            return JsonResponse({"error": "Invalid or missing correct answers count."}, status=400)
+            return JsonResponse({"error": "Invalid answer values."}, status=400)
+
+        question_ids = list(submitted_answers.keys())
+
+        with connection.cursor() as myCursor:
+            format_strings = ','.join(['%s'] * len(question_ids))
+            myCursor.execute(f"""
+                SELECT q.question_id, q.question_text, a.answer_id, a.answer_text
+                FROM questions q
+                JOIN question_answers qa ON qa.question_id = q.question_id
+                JOIN answers a ON qa.answer_id = a.answer_id
+                WHERE a.is_correct = TRUE AND q.question_id IN ({format_strings})
+            """, question_ids)
+            correct_answer_map = {
+                str(row[0]): {"question": row[1], "answer_id": row[2], "answer_text": row[3]}
+                for row in myCursor.fetchall()
+            }
+
+            submitted_answer_ids = list(submitted_answers.values())
+            format_strings = ','.join(['%s'] * len(submitted_answer_ids))
+            myCursor.execute(f"""
+                SELECT answer_id, answer_text FROM answers
+                WHERE answer_id IN ({format_strings})
+            """, submitted_answer_ids)
+            user_answer_texts = {row[0]: row[1] for row in myCursor.fetchall()}
+
+        correct_count = 0
+        wrong_answers = []
+
+        for q_id, user_aid in submitted_answers.items():
+            correct = correct_answer_map.get(q_id)
+            if correct and correct["answer_id"] == user_aid:
+                correct_count += 1
+            else:
+                wrong_answers.append({
+                    "question_text": correct["question"] if correct else "[Unknown Question]",
+                    "user_answer": user_answer_texts.get(user_aid, "No answer"),
+                    "correct_answer": correct["answer_text"] if correct else "Unknown"
+                })
 
         with connection.cursor() as myCursor:
             myCursor.execute("""
                 SELECT highest_score, correct_answers FROM leaderboard WHERE user_id = %s
             """, [user_id])
-
             existing_entry = myCursor.fetchone()
 
             if (
                 existing_entry is None or
-                correct_answers > existing_entry[1] or
-                (correct_answers == existing_entry[1] and completion_time < existing_entry[0])
+                correct_count > existing_entry[1] or
+                (correct_count == existing_entry[1] and completion_time < existing_entry[0])
             ):
                 myCursor.execute("""
                     INSERT INTO leaderboard (user_id, highest_score, correct_answers)
                     VALUES (%s, %s, %s)
                     ON CONFLICT (user_id) DO UPDATE
                     SET highest_score = EXCLUDED.highest_score, correct_answers = EXCLUDED.correct_answers;
-                """, [user_id, completion_time, correct_answers])
-        return redirect("timeTrialApp:time-trial-home")
+                """, [user_id, completion_time, correct_count])
+
+        return render(request, "timeTrialApp/time_trial_results.html", {
+            "correct_answers": correct_count,
+            "wrong_answers": wrong_answers
+        })

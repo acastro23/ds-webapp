@@ -209,13 +209,11 @@ def profile_data(request):
 
     if request.method == "GET":
         try:
-
             user_result = supabase.table("users").select("bio, profile_picture").eq("user_id", user_id).execute()
             if not user_result.data:
                 return JsonResponse({"error": "User not found"}, status=404)
             user_data = user_result.data[0]
 
-            # ths the Quiz stats ---------------------
             score_data = supabase.table("scores")\
                 .select("quiz_id, score")\
                 .eq("user_id", user_id)\
@@ -223,7 +221,6 @@ def profile_data(request):
 
             quizzes_completed = len({entry["quiz_id"] for entry in score_data.data})
             highest_score = max((entry["score"] for entry in score_data.data), default=0)
-
 
             leaderboard_data = supabase.table("leaderboard")\
                 .select("user_id, correct_answers")\
@@ -259,10 +256,12 @@ def profile_data(request):
                 image_file = request.FILES.get("profile_picture")
                 base64_image = None
 
-                if image_file:                    
+                if image_file:
                     base64_image = "data:" + image_file.content_type + ";base64," + base64.b64encode(image_file.read()).decode("utf-8")
 
-                update_data = {"bio": bio}
+                update_data = {}
+                if bio:
+                    update_data["bio"] = bio
                 if base64_image:
                     update_data["profile_picture"] = base64_image
 
@@ -271,18 +270,23 @@ def profile_data(request):
 
             else:
                 data = json.loads(request.body)
-                bio = data.get("bio", "")
-                remove_picture = data.get("remove_picture", False)
 
-                update_data = {"bio": bio}
-                if remove_picture:
+                if "quiz_id" in data and "current_question_index" in data:
+                    supabase.table("user_progress").update({
+                        "current_question_index": data["current_question_index"]
+                    }).eq("user_id", user_id).eq("quiz_id", data["quiz_id"]).execute()
+                    return JsonResponse({"message": "Progress saved"})
+
+                update_data = {}
+                if "bio" in data:
+                    update_data["bio"] = data["bio"]
+                if data.get("remove_picture", False):
                     update_data["profile_picture"] = None
 
-                supabase.table("users").update(update_data).eq("user_id", user_id).execute()
-                return JsonResponse({"message": "Profile updated"})
+                if update_data:
+                    supabase.table("users").update(update_data).eq("user_id", user_id).execute()
 
+                return JsonResponse({"message": "Profile updated"})
         except Exception as e:
             myLogger.error("Error updating profile", exc_info=True)
             return JsonResponse({"error": "An unexpected error occurred"}, status=500)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)

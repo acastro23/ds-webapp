@@ -9,33 +9,28 @@
 
       <h2 class="fw-bold mb-4">Profile</h2>
 
-
       <label for="profile-upload" class="d-inline-block position-relative" style="cursor: pointer;">
         <img id="profile-picture" src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="Profile Picture"
              class="rounded-circle shadow" width="140" height="140">
         <input type="file" id="profile-upload" class="d-none" accept="image/*">
       </label>
 
-
-      <p id="username-display" class="fw-semibold mt-2 mb-3"></p>
-
+      <p id="username-display" class="fw-semibold mt-2 mb-2"></p>
 
       <div id="remove-btn-container" class="mb-3" style="display: none;">
-        <button id="remove-picture" class="btn btn-outline-danger btn-sm">Remove Profile Picture</button>
+        <a href="#" id="remove-picture" class="text-muted small">Remove picture</a>
       </div>
-
 
       <div class="my-2">
         <button id="edit-btn" class="btn btn-dark">Edit Profile</button>
       </div>
 
-
       <div class="text-start mx-auto mt-4" style="max-width: 900px;">
         <label class="form-label fw-semibold">Bio</label>
-        <textarea id="bio-input" class="form-control" rows="4" placeholder="Tell us a bit about yourself..." disabled style="background-color: #f8f9fa;"></textarea>
-        <button id="save-btn" class="btn btn-dark mt-3" style="display: none;">Save Profile</button>
+        <div id="bio-display" class="p-3 border rounded text-start" style="min-height: 80px;"></div>
+        <textarea id="bio-input" class="form-control d-none mt-2" rows="4" placeholder="Tell us a bit about yourself..."></textarea>
+        <button id="save-btn" class="btn btn-dark mt-3 d-none">Save Profile</button>
       </div>
-
 
       <div class="mt-5">
         <h4 class="fw-semibold text-start mb-3 text-center" id="your-stats">Your Stats</h4>
@@ -71,11 +66,11 @@
   </div>
 </div>
 
-
 <script>
   const profilePicture = document.getElementById("profile-picture");
   const profileUpload = document.getElementById("profile-upload");
   const bioInput = document.getElementById("bio-input");
+  const bioDisplay = document.getElementById("bio-display");
   const editBtn = document.getElementById("edit-btn");
   const saveBtn = document.getElementById("save-btn");
   const removeBtn = document.getElementById("remove-picture");
@@ -87,44 +82,59 @@
   const timeTrial = document.getElementById("time-trial");
   const rank = document.getElementById("rank");
 
+  const cacheKey = "profile_cache_v1";
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      renderProfileData(data);
+    } catch {}
+  }
 
   fetch("/users/profile-data/")
     .then(response => response.json())
     .then(data => {
-      if (data.bio) {
-        bioInput.value = data.bio;
-      }
-      if (data.profile_picture) {
-        profilePicture.src = data.profile_picture;
-        removeBtnContainer.style.display = "block";
-      } else {
-        profilePicture.src = "https://www.gravatar.com/avatar/?d=mp&f=y";
-        removeBtnContainer.style.display = "none";
-      }
-      if (data.username) {
-        usernameDisplay.innerText = data.username;
-      }
-      if (data.quiz_count !== undefined) {
-        quizCount.innerText = data.quiz_count;
-      }
-      if (data.highest_score !== undefined) {
-        highestScore.innerText = data.highest_score;
-      }
-      if (data.time_trial) {
-        timeTrial.innerText = `${data.time_trial} correct`;
-      } else {
-        timeTrial.innerText = "--";
-      }
-      if (data.rank !== null && data.rank !== undefined) {
-        rank.innerText = `#${data.rank}`;
-      } else {
-        rank.innerText = "--";
-      }
+      renderProfileData(data);
+      localStorage.setItem(cacheKey, JSON.stringify(data));
     });
 
+  function renderProfileData(data) {
+    if (data.bio) {
+      bioInput.value = data.bio;
+      bioDisplay.innerText = data.bio;
+    }
+    if (data.profile_picture) {
+      profilePicture.src = data.profile_picture;
+      removeBtnContainer.style.display = "block";
+    } else {
+      profilePicture.src = "https://www.gravatar.com/avatar/?d=mp&f=y";
+      removeBtnContainer.style.display = "none";
+    }
+    if (data.username) {
+      usernameDisplay.innerText = data.username;
+    }
+    if (data.quiz_count !== undefined) {
+      quizCount.innerText = data.quiz_count;
+    }
+    if (data.highest_score !== undefined) {
+      highestScore.innerText = data.highest_score;
+    }
+    if (data.time_trial) {
+      timeTrial.innerText = `${data.time_trial} correct`;
+    } else {
+      timeTrial.innerText = "--";
+    }
+    if (data.rank !== null && data.rank !== undefined) {
+      rank.innerText = `#${data.rank}`;
+    } else {
+      rank.innerText = "--";
+    }
+  }
+
   editBtn.addEventListener("click", () => {
-    bioInput.disabled = false;
-    saveBtn.style.display = "inline-block";
+    bioDisplay.classList.add("d-none");
+    bioInput.classList.remove("d-none");
+    saveBtn.classList.remove("d-none");
   });
 
   saveBtn.addEventListener("click", () => {
@@ -141,6 +151,7 @@
     })
     .then(response => {
       if (!response.ok) throw new Error("Error updating profile");
+      localStorage.removeItem(cacheKey);
       location.reload();
     })
     .catch(error => alert(error));
@@ -153,13 +164,16 @@
       reader.onload = () => {
         profilePicture.src = reader.result;
         removeBtnContainer.style.display = "block";
-        saveBtn.style.display = "inline-block";
+        saveBtn.classList.remove("d-none");
       };
       reader.readAsDataURL(file);
     }
   });
 
-  removeBtn.addEventListener("click", () => {
+  removeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!confirm("Are you sure you want to remove your profile picture?")) return;
+
     fetch("/users/profile-data/", {
       method: "POST",
       headers: {
@@ -170,6 +184,7 @@
     })
     .then(response => {
       if (!response.ok) throw new Error("Error removing picture");
+      localStorage.removeItem(cacheKey); 
       location.reload();
     })
     .catch(error => alert(error));
