@@ -47,8 +47,8 @@ def register_user(request):
     """
     The breakdown:
     -------------
-        * check to make sure that is sent back is valid and ensure right method is used.
-        * check database for matching emails and preventing registration using dup. email address
+        * check to make sure that what is sent back is valid and ensure right method is used.
+        * check database for matching emails and prevent registration using a duplicate email address
         * register the user to the database and account for unexpected errors
     """
     if request.method == "POST":
@@ -61,6 +61,10 @@ def register_user(request):
         username = data.get("username")
         email = data.get("email")
         password = data.get("password")
+        confirm_password = data.get("confirmPassword")
+
+        if password != confirm_password:
+            return JsonResponse({"error": "Passwords do not match"}, status=400)
 
         val_errors = []
         username_error = val_user(username)
@@ -103,13 +107,16 @@ def login_user(request):
     """
     The breakdown:
     -------------
-        * check to make sure that is sent back is valid and ensure right method is used.
-        * ensure there is an email and password input for login
-        * ensure there is a match for the input in the database
-        * if there is a match, start a session(cookie)
-        * account for unexpected errors as e
+        * GET: render login page
+        * POST: handle login with email/password
+        * validate fields and hash check
+        * set session if successful
+        * return JSON response
     """
-    if request.method == "POST":
+    if request.method == "GET":
+        return render(request, "userApp/login.html")
+
+    elif request.method == "POST":
         try:
             if request.content_type == "application/json":
                 data = json.loads(request.body)
@@ -127,17 +134,15 @@ def login_user(request):
             user_response = supabase.table("users").select("*").eq("email", email).execute()
             if not user_response.data:
                 return JsonResponse({"error": "Invalid email or password"}, status=401)
-            
-            myUser = user_response.data[0]
 
+            myUser = user_response.data[0]
             stored_password = myUser.get("password", "").encode("utf-8")
+
             if not bcrypt.checkpw(password.encode("utf-8"), stored_password):
                 return JsonResponse({"error": "Invalid email or password"}, status=401)
 
-            #--------------  AC0122 -- Test code for storing the users info in session  ---------------
             request.session["user_id"] = myUser["user_id"]
             request.session["username"] = myUser["username"]
-            #------------------------------------------------------------------------------------------
 
             return JsonResponse({"message": "Login was successful", "username": myUser["username"]}, status=200)
 

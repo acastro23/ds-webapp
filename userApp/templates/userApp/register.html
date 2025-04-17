@@ -1,78 +1,87 @@
 {% extends "ds_app/base.html" %}
 {% block title %}Register{% endblock %}
+{% load static %}
 
 {% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-3">Register</h2>
+  <p class="text-center text-muted">Create your account to get started!</p>
 
-<div class="container d-flex flex-column align-items-center justify-content-center pt-5 pb-4">
+  <div class="mx-auto border rounded p-4" style="max-width: 400px;">
+    <div id="error" class="alert alert-danger d-none" role="alert"></div>
+    <div id="success" class="alert alert-success d-none" role="alert"></div>
 
+    <form id="registerForm">
+      <div class="mb-3">
+        <label for="username" class="form-label">username</label>
+        <input type="text" id="username" name="username" class="form-control" required>
+      </div>
 
-    <div class="text-center mb-4 pb-2 border-bottom" style="max-width: 400px; width: 100%;">
-        <h2 class="fw-bold mb-1">StrucTutor</h2>
-        <h4 class="mb-1">Register</h4>
-        <p class="text-muted mb-0">Create your account to get started!</p>
+      <div class="mb-3">
+        <label for="email" class="form-label">email</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">password</label>
+        <input type="password" id="password" name="password" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">confirm password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-dark">Register</button>
+      </div>
+    </form>
+
+    <div class="mt-3 text-center">
+      <a href="{% url 'userApp:login-user' %}">Already have an account?</a>
     </div>
-
-
-    <div class="p-4 border border-dark rounded shadow-sm" style="width: 300px;">
-        <div id="error-message" class="alert alert-danger d-none"></div>
-
-        <form id="registerForm" method="POST" action="{% url 'userApp:register-user' %}">
-            {% csrf_token %}
-
-            <div class="mb-3">
-                <label for="email" class="form-label">email</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="confirmPassword" class="form-label">confirm password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-dark w-100">Register</button>
-            </div>
-        </form>
-
-        <div class="text-center mt-3">
-            <a href="{% url 'userApp:login-page' %}" class="text-decoration-none">Already have an account?</a>
-        </div>
-    </div>
+  </div>
 </div>
 
-
 <script>
-    document.getElementById("registerForm").addEventListener("submit", async function(event) {
-        event.preventDefault();
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-        let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-        let confirmPassword = document.getElementById("confirmPassword").value;
-        let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const username = document.getElementById("username").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  const errorBox = document.getElementById("error");
+  const successBox = document.getElementById("success");
 
-        let response = await fetch("{% url 'userApp:register-user' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
-            },
-            body: JSON.stringify({ email, password, confirmPassword })
-        });
-
-        let data = await response.json();
-
-        if (response.ok) {
-            window.location.href = "{% url 'userApp:login-page' %}";
-        } else {
-            let errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = data.error;
-            errorMessage.classList.remove("d-none");
-        }
-    });
+  fetch("/users/register/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": "{{ csrf_token }}"
+    },
+    body: JSON.stringify({ username, email, password, confirmPassword })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      errorBox.classList.remove("d-none");
+      successBox.classList.add("d-none");
+      errorBox.innerText = Array.isArray(data.error) ? data.error.join("\n") : data.error;
+    } else {
+      errorBox.classList.add("d-none");
+      successBox.classList.remove("d-none");
+      successBox.innerText = "Account created! Redirecting to login...";
+      setTimeout(() => {
+        location.replace("{% url 'userApp:login-user' %}");
+      }, 2000);
+    }
+  })
+  .catch(() => {
+    errorBox.classList.remove("d-none");
+    successBox.classList.add("d-none");
+    errorBox.innerText = "An unexpected error occurred.";
+  });
+});
 </script>
 {% endblock %}
